@@ -35,9 +35,9 @@ function SignUp() {
 	  }
 
 	  catch(err){
-	  	alert("Invalid " + err.message + ". \nPlease insert a correct " 
-	  		+ err.message + " between " + DATA_FORMAT.min +
-	  		" and " + DATA_FORMAT.max + " characters.")
+	  	return alert("Invalid " + err.message + ". \nPlease insert a correct " 
+	  		+ err.message + " between " + DATA_FORMAT.min + " and " + 
+        DATA_FORMAT.max + " characters.")
 	  }
 		//if all ok, send post request to backend
     axios.post(ENDPOINT_SU, userInfo) 
