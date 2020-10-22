@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-const server_uri = "sv";
+const server_uri = "http://localhost:8000/token";
 const DATA_FORMAT = {
   min: 4,
   max: 16
@@ -35,11 +35,19 @@ function LogIn() {
       );
     }
 
-    axios({
-      method: "post",
-      url: server_uri,
-      data: userInfo,
-    });
+    var bodyFormData = new FormData();
+    bodyFormData.append('username', userInfo.email);
+    bodyFormData.append('password', userInfo.password);
+
+    axios.post(server_uri, bodyFormData) 
+    .then(response => {
+      localStorage.setItem("email", response.data.access_token)
+      alert("Welcome!" + response.data.access_token)
+    })
+    .catch(error=> {
+      alert("Invalid email or password. Please check your credentials.")
+    })
+
   };
 
   return (
