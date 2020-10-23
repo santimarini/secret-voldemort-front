@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import './App.css'
 
+import AuthRoute from './ProtectedRoutes/AuthRoute'
+import NoLogged from './ProtectedRoutes/NoLogged'
+
 import LogIn from './Components/Auth/LogIn'
 import Profile from './Components/Auth/Profile'
 import SignUp from './Components/Auth/SignUp'
@@ -12,9 +15,9 @@ class App extends Component {
       <BrowserRouter>
         <div className="App">
         <Switch>
-            <Route path='/login' component={LogIn}/>
-            <Route path='/signup' component={SignUp}/>
-            <Route path='/profile' component={Profile}/>
+            <AuthRoute exact path='/login' component={LogIn}/>
+            <AuthRoute exact path='/signup' component={SignUp}/>
+            <NoLogged path='/profile' component={Profile}/>
         </Switch>
         </div>
       </BrowserRouter>
