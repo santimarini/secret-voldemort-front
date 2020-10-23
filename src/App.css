@@ -36,3 +36,10 @@
     transform: rotate(360deg);
   }
 }
+
+/* Profile divider */
+.divider{
+  width:15px;
+  height:auto;
+  display:inline-block;
+}
