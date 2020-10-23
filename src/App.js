@@ -8,7 +8,7 @@ import NoLogged from './ProtectedRoutes/NoLogged'
 import LogIn from './Components/Auth/LogIn'
 import Profile from './Components/Auth/Profile'
 import SignUp from './Components/Auth/SignUp'
-import Game from './Components/Game'
+// import Game from './Components/Game'
 
 class App extends Component {
   render() {
@@ -19,7 +19,6 @@ class App extends Component {
             <AuthRoute exact path='/login' component={LogIn}/>
             <AuthRoute exact path='/signup' component={SignUp}/>
             <NoLogged path='/profile' component={Profile}/>
-            <NoLogged path='/play' component={Game}/>
         </Switch>
         </div>
       </BrowserRouter>
