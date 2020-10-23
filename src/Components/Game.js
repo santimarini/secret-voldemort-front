@@ -8,7 +8,7 @@ const DATA_FORMAT = {
 }
 const ENDPOINT_G = 'http://0.0.0.0:8000/newgame'
 
-function Game() {
+function Game(props) {
 
   const [gameInfo, setGameInfo  ] = useState({
     email: '',
@@ -20,10 +20,9 @@ function Game() {
     setGameInfo({...gameInfo, [e.target.name]: e.target.value})
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    var u_email = localStorage.getItem("email")
-    gameInfo.email = u_email
+    gameInfo.email = localStorage.getItem("email")
     console.log(gameInfo)
     // check game name length
     if (gameInfo.name.length < DATA_FORMAT.min ||
@@ -33,13 +32,18 @@ function Game() {
         " and " + DATA_FORMAT.max + " characters."))
     
     try {
-      let response = axios.post(ENDPOINT_G, gameInfo)
-      alert("Game created! Its name is " + gameInfo.name + 
+      let response = await axios.post(ENDPOINT_G, gameInfo)
+      alert("Game created! Its name is " + response.data.name + 
         ". Invite your friends to join!")
+      //redirect to join game created
+      props.history.push('/game/' + response.data.name)
     }
-    catch(err) {
-      alert(err)
-    }
+    catch (error) {
+      if (error.response.status === 401)
+        alert(error.response.data.detail)
+      else
+        alert(error)
+    } 
   }
 
   return (
@@ -53,8 +57,8 @@ function Game() {
         </div>
         <div className="input-field">
           <label htmlFor="number">Max. Players::</label>
-          <input type="number" id="max_players" name="max_players" min="5" max="10" 
-            onChange={handleChange} required/>
+          <input type="number" id="max_players" name="max_players" 
+            min="5" max="5" onChange={handleChange} required/>
         </div>
         <div className="input-field">
           <button className="btn pink lighten-1 z-depth-0"> Sign Up </button>
