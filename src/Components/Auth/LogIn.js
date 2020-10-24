@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Redirect } from "react-router-dom";
 
 const server_uri = "http://localhost:8000/token";
 const DATA_FORMAT = {
@@ -46,7 +45,10 @@ function LogIn(props) {
       props.history.push("/profile")
     })
     .catch(error=> {
-      alert("Invalid email or password. Please check your credentials.")
+      if (error.response.status === 400)
+        alert(error.response.data.detail)
+      else
+        alert(error)
     })
 
   };
