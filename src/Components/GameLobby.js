@@ -44,18 +44,24 @@ function GameLobby(props) {
 
   return (
     <div>
-    {started ? <InGame /> : (
+      {started ? (
+        <InGame />
+      ) : (
+        <div>
+          <h2>Username: {username} </h2>
+          <h2>Game name: {gameInfo.gamename} </h2>
+          <h2>Max players: {gameInfo.max_players} </h2>
 
-      <div>
-      <h1>Username: {username} </h1>
-      <h1>Game name: {gameInfo.gamename} </h1>
-      <h1>Max players: {gameInfo.max_players} </h1>
-
-      {join_input.email === gameInfo.creator ? (
-        <button onClick={() => startGame()} className="btn pink lighten-1 z-depth-0">Start Game</button>
-      ) : null}
-    </div>
-    )}
+          {join_input.email === gameInfo.creator ? (
+            <button
+              onClick={() => startGame()}
+              className="btn pink lighten-1 z-depth-0"
+            >
+              Start Game
+            </button>
+          ) : null}
+        </div>
+      )}
     </div>
   );
 }
