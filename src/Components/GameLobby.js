@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
+import InGame from './InGame'
+
 function GameLobby(props) {
+   const [started, setStarted] = useState(false)
    const [username, setUsername] = useState("")
    const [gameInfo, setGameInfo] = useState({
        gamename: "",
        max_players: "",
-       players: []
+       players: [],
+       creator: ''
    })
 
   const join_input = {
@@ -21,9 +25,10 @@ function GameLobby(props) {
       .then((response) => {
         setUsername(response.data.username)
         setGameInfo({
-            gamename: response.data.gamename,
+            gamename: response.data.game_name,
             max_players: response.data.max_players,
-            players: response.data.players
+            players: response.data.players,
+            creator: response.data.creator
         })
       })
       .catch((error) => {
@@ -33,12 +38,25 @@ function GameLobby(props) {
       });
   }, []);
 
+  const startGame = () => {
+    setStarted(true)
+  }
+
   return (
+    <div>
+    {started ? <InGame /> : (
+
       <div>
       <h1>Username: {username} </h1>
       <h1>Game name: {gameInfo.gamename} </h1>
       <h1>Max players: {gameInfo.max_players} </h1>
-      </div>
+
+      {join_input.email === gameInfo.creator ? (
+        <button onClick={() => startGame()} className="btn pink lighten-1 z-depth-0">Start Game</button>
+      ) : null}
+    </div>
+    )}
+    </div>
   );
 }
 
