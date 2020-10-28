@@ -6,15 +6,31 @@ function Nomination(props) {
 
     const [gameInfo, setGameInfo] = useState({
     game_name: '', 
-    minister: ''
-  })  
+    minister: '',
+    players: [],
+  })
+    const [nominationInfo, setNominationInfo] = useState({
+    director: ''
+})
+
+    const handleSubmit = async (e) => {
+        nominationInfo.director = document.getElementById("candidate").value
+        try{
+            console.log(nominationInfo.director)
+            let response = await axios.put(`http://localhost:8000/game?game_name=${gameInfo.game_name}&dir=${nominationInfo.director}`)
+        }
+        catch (err) {
+            alert(err)
+        }
+  }
+ 
   useEffect(() => {
       async function onElection() {
         gameInfo.game_name = props.game_name
         try {     
           let response = await axios.post(`http://localhost:8000/new_turn?game_name=${gameInfo.game_name}`)
-          setGameInfo({ minister: "santi" })
-          console.log(response.data)
+          setGameInfo({...gameInfo, minister: response.data.minister,
+            players: response.data.players })
         }
         catch (error) {
           alert(error)
@@ -27,33 +43,26 @@ function Nomination(props) {
     return(
         <div class className="container">
             <div class className="notification">
-                You have been elected as Minister of Magic.
+                You have been nominated as Minister of Magic.
             </div>
-            <div className="selection-request">
-                <p>Please select a player to nominate as Director.</p>
-            </div>
-            <div class className="select">
-            <select name="players" id="players" multiple size=<var>minister.length</var>>
-                <option value="pedro"> { gameInfo.minister } </option>
-                <option value="pedro"> { gameInfo.minister } </option>
+            <p>Please select a player to nominate as Director.</p>
+            <select id="candidate" size=<var>gameInfo.players.length</var>>
+                { gameInfo.players.map((player) => <option value={player.id}> { player.username } </option>) }
             </select>
-            </div>
-            <div class className="select-button">
-            <button className="btn pink lighten-1 z-depth-0"> 
-                Elect director
-            </button>
-            </div>
+            <button onClick={handleSubmit}> Nominate </button>
+            
         </div>
-
-
     )   
   }
   else {
     return(
-        "El ministro está nominando director..."
+        <div>
+        "The nominated minister" ${gameInfo.minister.username}"is choosing director..."
+        </div>
     )   
 
   }
 }
 
 export default Nomination;
+    
