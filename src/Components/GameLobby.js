@@ -38,14 +38,21 @@ function GameLobby(props) {
       });
   }, []);
 
-  const startGame = () => {
-    setStarted(true)
-  }
+  const startGame = async () => {
+    try {
+      let response = await axios.post(
+        "http://localhost:8000/start?game_name=" + gameInfo.gamename
+      );
+    } catch (err) {
+      alert(err.data);
+    }
+    setStarted(true);
+  };
 
   return (
     <div>
       {started ? (
-        <InGame />
+        <InGame game_name={join_input.game_name} />
       ) : (
         <div>
           <h2>Username: {username} </h2>
