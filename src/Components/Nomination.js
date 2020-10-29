@@ -18,6 +18,7 @@ function Nomination(props) {
         try{
             console.log(nominationInfo.director)
             let response = await axios.put(`http://localhost:8000/game?game_name=${gameInfo.game_name}&dir=${nominationInfo.director}`)
+            props.handleCount(2)
         }
         catch (err) {
             alert(err)
@@ -39,28 +40,27 @@ function Nomination(props) {
         onElection()  
     }, []);  
   
-    if (localStorage.getItem("email") === gameInfo.minister.user1){
-    return(
-        <div class className="container">
-            <div class className="notification">
-                You have been nominated as Minister of Magic.
+    if (localStorage.getItem("email") === gameInfo.minister.user1) {
+        return(
+            <div class className="container">
+                <div class className="notification">
+                    You have been nominated as Minister of Magic.
+                </div>
+                <p>Please select a player to nominate as Director.</p>
+                <select id="candidate" size=<var>gameInfo.players.length</var>>
+                    { gameInfo.players.map((player) => <option value={player.id}> { player.username } </option>) }
+                </select>
+                <button onClick={handleSubmit}> Nominate </button>
+                
             </div>
-            <p>Please select a player to nominate as Director.</p>
-            <select id="candidate" size=<var>gameInfo.players.length</var>>
-                { gameInfo.players.map((player) => <option value={player.id}> { player.username } </option>) }
-            </select>
-            <button onClick={handleSubmit}> Nominate </button>
-            
-        </div>
-    )   
+        )   
   }
   else {
-    return(
-        <div>
-        "The nominated minister" ${gameInfo.minister.username}"is choosing director..."
-        </div>
-    )   
-
+      return(
+          <div>
+          "The nominated minister" ${gameInfo.minister.username}"is choosing director..."
+          </div>
+      )   
   }
 }
 
