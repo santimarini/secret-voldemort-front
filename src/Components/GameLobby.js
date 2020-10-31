@@ -10,14 +10,16 @@ function GameLobby(props) {
        gamename: "",
        max_players: "",
        players: [],
-       creator: ''
+       creator: localStorage.getItem("email")
    })
-
   const join_input = {
     game_name: props.match.params.gamename,
     email: localStorage.getItem("email"),
   };
+
+
   const server_uri = `http://localhost:8000/game/${join_input.game_name}?email=${join_input.email}`;
+
 
   useEffect(() => {
     axios
@@ -38,37 +40,58 @@ function GameLobby(props) {
       });
   }, []);
 
-  const startGame = async () => {
+
+  var interval = null
+
+  async function askIsStarted() {
+      try {
+        let response = await axios.get(`http://localhost:8000/game/is_started?game_name=${gameInfo.gamename}`)
+        if (response.data === true){
+          clearInterval(interval)
+          setStarted(true)
+        }
+      }
+      catch (err) {
+        alert(err)
+      }
+  }
+
+
+  async function startGame() {
     try {
       let response = await axios.post(
-        "http://localhost:8000/start?game_name=" + gameInfo.gamename
+        `http://localhost:8000/start?game_name=${join_input.game_name}`
       );
+      alert(response.data)
+      setStarted(true)
     } catch (err) {
-      alert(err.data);
+      clearInterval(interval)
+      alert(err);
     }
-    setStarted(true);
   };
 
   return (
     <div>
-      {started ? (
-        <InGame game_name={join_input.game_name} />
-      ) : (
+      {!started &&
+      <div>
+        <h2>Username: {username} </h2>
+        <h2>Game name: {gameInfo.gamename} </h2>
+        <h2>Max players: {gameInfo.max_players} </h2>
+     </div>
+      }
+      {localStorage.getItem("email") === gameInfo.creator ? (
         <div>
-          <h2>Username: {username} </h2>
-          <h2>Game name: {gameInfo.gamename} </h2>
-          <h2>Max players: {gameInfo.max_players} </h2>
-
-          {join_input.email === gameInfo.creator ? (
+        {!started && <div>
             <button
               onClick={() => startGame()}
-              className="btn pink lighten-1 z-depth-0"
-            >
+              className="btn pink lighten-1 z-depth-0">
               Start Game
             </button>
-          ) : null}
-        </div>
-      )}
+          </div>}
+      </div>) : interval = setInterval(function() {
+        askIsStarted();
+        }, 6000)}
+      {started && <InGame game_name={gameInfo.gamename}/>}
     </div>
   );
 }
