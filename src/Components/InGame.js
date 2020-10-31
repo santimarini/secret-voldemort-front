@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 import Nomination from "./Nomination";
 import Voting from "./Voting";
+import Proclamation from "./Proclamation";
 
 function InGame(props) {
   const [gameInfo, setGameInfo] = useState({
@@ -28,6 +29,12 @@ function InGame(props) {
       return (
         <div>
           <Voting handleCount={handleCount} game_name={gameInfo.game_name} />
+        </div>
+      );
+    case 3:
+      return (
+        <div>
+          <Proclamation game_name={gameInfo.game_name}/>
         </div>
       );
     default:

@@ -67,15 +67,15 @@ function Voting(props) {
       {Object.keys(voteInfo).map((key) => {
         switch (key) {
           case "cant_vote":
-            return <p>Votes: {voteInfo[key]}</p>;
+            return <p key={key}>Votes: {voteInfo[key]}</p>;
           case "vote_less":
-            return <p>Remaining votes: {voteInfo[key]}</p>;
+            return <p key={key}>Remaining votes: {voteInfo[key]}</p>;
           case "status_vote":
-            return <p>{voteInfo[key]}</p>;
+            return <p key={key}>{voteInfo[key]}</p>;
           case "elect_min":
-            return <p>Minister Elected: {voteInfo[key]}</p>;
+            return <p key={key}>Minister Elected: {voteInfo[key].username}</p>;
           case "elect_dir":
-            return <p>Director Elected: {voteInfo[key]}</p>;
+            return <p key={key}>Director Elected: {voteInfo[key].username}</p>;
         }
       })}
     </div>
