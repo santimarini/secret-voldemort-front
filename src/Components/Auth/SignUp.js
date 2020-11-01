@@ -6,10 +6,10 @@ const DATA_FORMAT = {
   min: 4,
   max: 16
 }
-const ENDPOINT_SU = 'http://0.0.0.0:8000/signup'
+const ENDPOINT_SU = 'http://localhost:8000/signup'
 
 
-function SignUp() {
+function SignUp(props) {
 
   const [userInfo, setUserInfo] = useState({
     username: '',
@@ -41,8 +41,9 @@ function SignUp() {
     
     //if all ok, send post request to backend
     try { 
-      let response = await axios.post(ENDPOINT_SU, userInfo) 
+      await axios.post(ENDPOINT_SU, userInfo) 
       alert("Welcome " + userInfo.username + "!" + " Log in for play!")
+      props.history.push("/login")
     }
     catch(error) {
       var b = error.toString().includes("404")

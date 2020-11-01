@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import './App.css'
-import SignUp from './_components/auth/SignUp'
+import SignUp from './Components/Auth/SignUp'
 
 class App extends Component {
   render() {
