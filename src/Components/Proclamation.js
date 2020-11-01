@@ -23,7 +23,7 @@ function Proclamation(props) {
                 setDisabled(true)
                 interval = setInterval(function() {
                     askIsProclaimed()
-                }, 6000)
+                }, 2500)
             }
             else if (localStorage.getItem("email") === gameInfo.director) {
                 gameInfo.disc_card = document.getElementById("dir_discarded").value
@@ -107,7 +107,7 @@ function Proclamation(props) {
              {!minDiscarded && localStorage.getItem("email") === gameInfo.director && (
                interval = setInterval(function() {
                    askIsProclaimed()
-               }, 6000)
+               }, 2500)
              )}
              {!minDiscarded && localStorage.getItem("email") === gameInfo.director && (
                 <div>
