@@ -34,11 +34,13 @@ function InGame(props) {
     case 3:
       return (
         <div>
-          <Proclamation game_name={gameInfo.game_name}/>
+          <Proclamation handleCount={handleCount} game_name={gameInfo.game_name}/>
         </div>
       );
+    case 4:
+      return alert("Game finished!")
     default:
-      return <div>hola</div>;
+      return <div>No Conocido</div>;
   }
 }
 

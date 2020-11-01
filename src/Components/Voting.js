@@ -43,7 +43,7 @@ function Voting(props) {
       });
     interval = setInterval(function() {
       askForPhaseChange()
-    }, 6000)
+    }, 2500)
   };
 
   const askForPhaseChange = async () => {

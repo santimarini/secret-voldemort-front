@@ -72,7 +72,7 @@ function Nomination(props) {
             </div>
         ) : interval = setInterval(function() {
           askIsNominated();
-          }, 6000)}
+          }, 2500)}
           {localStorage.getItem("email") !== gameInfo.minister.user1 &&
               <div>
                   The nominated minister {gameInfo.minister.username} is choosing director...
