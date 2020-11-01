@@ -90,7 +90,7 @@ function GameLobby(props) {
           </div>}
       </div>) : interval = setInterval(function() {
         askIsStarted();
-        }, 6000)}
+        }, 2500)}
       {started && <InGame game_name={gameInfo.gamename}/>}
     </div>
   );
