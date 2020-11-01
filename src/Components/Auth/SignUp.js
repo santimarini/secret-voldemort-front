@@ -41,8 +41,9 @@ function SignUp() {
     
     //if all ok, send post request to backend
     try { 
-      let response = await axios.post(ENDPOINT_SU, userInfo) 
+      await axios.post(ENDPOINT_SU, userInfo) 
       alert("Welcome " + userInfo.username + "!" + " Log in for play!")
+      props.history.push("/login")
     }
     catch(error) {
       var b = error.toString().includes("404")

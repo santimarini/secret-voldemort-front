@@ -45,7 +45,7 @@ function LogIn(props) {
       props.history.push("/profile")
     })
     .catch(error=> {
-      if (error.response.status === 400)
+      if (error.response.status === 404)
         alert(error.response.data.detail)
       else
         alert(error)
