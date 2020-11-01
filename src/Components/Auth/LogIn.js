@@ -7,7 +7,7 @@ const DATA_FORMAT = {
   max: 16
 }
 
-function LogIn() {
+function LogIn(props) {
   const [userInfo, setUserInfo] = useState({
     email: "",
     password: "",
@@ -42,10 +42,13 @@ function LogIn() {
     axios.post(server_uri, bodyFormData) 
     .then(response => {
       localStorage.setItem("email", response.data.access_token)
-      alert("Welcome!" + response.data.access_token)
+      props.history.push("/profile")
     })
     .catch(error=> {
-      alert("Invalid email or password. Please check your credentials.")
+      if (error.response.status === 404)
+        alert(error.response.data.detail)
+      else
+        alert(error)
     })
 
   };
