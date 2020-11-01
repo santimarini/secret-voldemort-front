@@ -10,6 +10,8 @@ function Voting(props) {
   const [vote, setVote] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const [voteInfo, setVoteInfo] = useState({})
+  const [endVote, setEndVote] = useState(false)
+  let interval;
 
   const game_name = props.game_name;
   const GET_POSTULATED = `http://localhost:8000/postulated?game_name=${game_name}`;
@@ -28,10 +30,10 @@ function Voting(props) {
       });
   }, []);
 
-  const handleVote = (vote) => {
+  const handleVote = async (vote) => {
     setDisabled(true)
     setVote(vote)
-    axios
+    await axios
       .put(`http://localhost:8000/game/${game_name}/vote?vote=${vote}`)
       .then((response) => {
         setVoteInfo(response.data)
@@ -39,6 +41,28 @@ function Voting(props) {
       .catch((error) => {
         alert(error);
       });
+    interval = setInterval(function() {
+      askForPhaseChange()
+    }, 6000)
+  };
+
+  const askForPhaseChange = async () => {
+    try {
+      let response = await axios.get(
+        `http://localhost:8000/phase?game_name=${game_name}`
+      );
+      if (response.data.phase_game === 3) {
+        clearInterval(interval)
+        props.handleCount(3);
+      }
+      else if(response.data.phase_game === 1) {
+        clearInterval(interval)
+        props.handleCount(1);
+      }
+    } catch (err) {
+      clearInterval(interval)
+      alert(err);
+    }
   };
 
   return (
