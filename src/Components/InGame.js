@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import {Redirect} from "react-router-dom";
 
 import Nomination from "./Nomination";
 import Voting from "./Voting";
 import Proclamation from "./Proclamation";
+import Profile from "./Auth/Profile";
 
 function InGame(props) {
   const [gameInfo, setGameInfo] = useState({
@@ -10,7 +12,8 @@ function InGame(props) {
   });
 
   const [phaseCount, setPhaseCount] = useState(1);
-
+  const [profile, setProfile] = useState(false)
+  
   function handleCount(value) {
     setPhaseCount(value);
   }
@@ -38,7 +41,18 @@ function InGame(props) {
         </div>
       );
     case 4:
-      return alert("Game finished!")
+      return (
+        <div>
+            { !profile ? (
+            <div>
+                <h3> Game ended. </h3>
+                <div>
+                  <button onClick={() => setProfile(true)}> Go to profile </button>
+                </div>
+            </div>
+            ) : <Profile/>}
+        </div>
+      ) 
     default:
       return <div>No Conocido</div>;
   }

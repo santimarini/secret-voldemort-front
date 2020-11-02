@@ -9,7 +9,7 @@ const DATA_FORMAT = {
 const ENDPOINT_SU = 'http://0.0.0.0:8000/signup'
 
 
-function SignUp() {
+function SignUp(props) {
 
   const [userInfo, setUserInfo] = useState({
     username: '',
