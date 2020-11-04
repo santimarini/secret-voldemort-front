@@ -56,7 +56,13 @@ function Nomination(props) {
             alert(err)
         }
     }
-   
+    
+    const triggerPolling = () => {
+      interval = setInterval(function () {
+        askIsNominated();
+      }, 2500);
+    };
+
     return(
         <div>
         {localStorage.getItem("email") === gameInfo.minister.user1 ? (
@@ -65,22 +71,19 @@ function Nomination(props) {
                     You have been nominated as Minister of Magic.
                 </div>
                 <p>Please select a player to nominate as Director.</p>
-                <select id="candidate" size=<var>gameInfo.players.length</var>>
+                <select id="candidate">
                     { gameInfo.players.map((player) => <option value={player.id}> { player.username } </option>) }
                 </select>
                 <button onClick={handleSubmit}> Nominate </button>
             </div>
-        ) : interval = setInterval(function() {
-          askIsNominated();
-          }, 6000)}
+        ) : triggerPolling()}
           {localStorage.getItem("email") !== gameInfo.minister.user1 &&
               <div>
                   The nominated minister {gameInfo.minister.username} is choosing director...
               </div>
           }
-       }
+       
       </div>)
 }
 
 export default Nomination;
-    
