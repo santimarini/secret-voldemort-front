@@ -2,16 +2,13 @@ import React, { useState } from "react";
 import axios from "axios";
 
 const server_uri = "http://localhost:8000/token";
-const DATA_FORMAT = {
-  min: 4,
-  max: 16
-}
 
 function LogIn(props) {
   const [userInfo, setUserInfo] = useState({
     email: "",
     password: "",
   });
+  const [err, setErr] = useState('')
 
   // get all user inputs
   const handleChange = (e) => {
@@ -21,19 +18,6 @@ function LogIn(props) {
   // send to the back the request when user accepts the form
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    if (
-      userInfo.password.length < DATA_FORMAT.min ||
-      DATA_FORMAT.max < userInfo.password.length
-    ) {
-      return alert(
-        "Invalid password. \nPlease insert a correct one between " +
-          DATA_FORMAT.min +
-          " and " +
-          DATA_FORMAT.max +
-          " characters."
-      );
-    }
 
     var bodyFormData = new FormData();
     bodyFormData.append('username', userInfo.email);
@@ -46,9 +30,9 @@ function LogIn(props) {
     })
     .catch(error=> {
       if (error.response.status === 404)
-        alert(error.response.data.detail)
+        setErr(error.response.data.detail)
       else
-        alert(error)
+        setErr(error)
     })
 
   };
@@ -79,6 +63,9 @@ function LogIn(props) {
         </div>
         <button className="btn pink lighten-1 z-depth-0"> Log In </button>
       </form>
+      {
+        err ? <p>{err}</p> : null
+      }
     </div>
   );
 }
