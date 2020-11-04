@@ -36,7 +36,7 @@ function SignUp(props) {
       if (userInfo.password.length < DATA_FORMAT.min ||
        DATA_FORMAT.max < userInfo.password.length)
         throw Error("password")
-          //if all ok, send post request to backend
+      //if all ok, send post request to backend
       try { 
         await axios.post(ENDPOINT_SU, userInfo) 
         alert(`Welcome ${userInfo.username}! Log in for play!`)
@@ -52,9 +52,7 @@ function SignUp(props) {
    }
     catch(err) {
       setError(`Invalid ${err.message}. Please insert a ${err.message} between ${DATA_FORMAT.min} to ${DATA_FORMAT.max} characters.`)
-
     }
-    
   }
 
   return (
