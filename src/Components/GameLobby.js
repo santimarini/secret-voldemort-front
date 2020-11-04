@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-import InGame from './InGame'
+import Profile from './Auth/Profile'
 
 function GameLobby(props) {
    const [started, setStarted] = useState(false)
@@ -70,6 +70,12 @@ function GameLobby(props) {
     }
   };
 
+  const triggerPolling = () => {
+    interval = setInterval(function() {
+      askIsStarted();
+    }, 2500)
+  }
+
   return (
     <div>
       {!started &&
@@ -88,10 +94,8 @@ function GameLobby(props) {
               Start Game
             </button>
           </div>}
-      </div>) : interval = setInterval(function() {
-        askIsStarted();
-        }, 2500)}
-      {started && <InGame game_name={gameInfo.gamename}/>}
+      </div>) : triggerPolling()}
+      {started && <Profile game_name={gameInfo.gamename}/>}
     </div>
   );
 }
