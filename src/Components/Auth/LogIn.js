@@ -32,7 +32,7 @@ function LogIn(props) {
       if (error.response.status === 404)
         setErr(error.response.data.detail)
       else
-        alert(error)
+        setErr(error)
     })
 
   };
