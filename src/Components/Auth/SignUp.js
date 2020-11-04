@@ -16,6 +16,8 @@ function SignUp(props) {
     email: '',
     password: ''
   })
+  const [error, setError] = useState('')
+  const [emailError, setEmailError] = useState('') 
 
   const handleChange = (e) => {
     setUserInfo({...userInfo, [e.target.name]: e.target.value})
@@ -24,6 +26,8 @@ function SignUp(props) {
   const handleSubmit = async (e) => {
     e.preventDefault()
     console.log(userInfo)
+    setError('')
+    setEmailError('')
     //check userInfo length
     try {
       if (userInfo.username.length < DATA_FORMAT.min ||
@@ -32,36 +36,32 @@ function SignUp(props) {
       if (userInfo.password.length < DATA_FORMAT.min ||
        DATA_FORMAT.max < userInfo.password.length)
         throw Error("password")
-    }
+      //if all ok, send post request to backend
+      try { 
+        await axios.post(ENDPOINT_SU, userInfo) 
+        alert(`Welcome ${userInfo.username}! Log in for play!`)
+        props.history.push("/login")
+      }
+      catch (error) {
+        if (error.response.status === 404) {
+          setEmailError("Email entered is already registered. Please enter another email.")
+        }
+        else
+          alert(error)
+      }
+   }
     catch(err) {
-      return alert("Invalid " + err.message + ". \nPlease insert a correct " 
-        + err.message + " between " + DATA_FORMAT.min + " and " + 
-        DATA_FORMAT.max + " characters.")
-    }
-    
-    //if all ok, send post request to backend
-    try { 
-      await axios.post(ENDPOINT_SU, userInfo) 
-      alert("Welcome " + userInfo.username + "!" + " Log in for play!")
-      props.history.push("/login")
-    }
-    catch(error) {
-      var b = error.toString().includes("404")
-      if (b)
-        alert("Email entered is already registered. " +
-          "Please enter another email.")
-      else
-        alert(error)
+      setError(`Invalid ${err.message}. Please insert a ${err.message} between ${DATA_FORMAT.min} to ${DATA_FORMAT.max} characters.`)
     }
   }
 
   return (
     <div class className="container">
       <form onSubmit={handleSubmit} className="white">
-        <h5 className="grey-text text-darken-3">Sign up for play!</h5>
+        <h3 className="grey-text text-darken-3">Sign up for play!</h3>
         <div className="input-field">
-          <label htmlFor="text">Username: </label>
-          <input type="text" id="username" name="username" 
+          <label htmlFor="text"> Alias: </label>
+          <input type="text" id="alias" name="username" 
             onChange={handleChange} required/>
         </div>
         <div className="input-field">
@@ -77,9 +77,19 @@ function SignUp(props) {
         <div className="input-field">
           <button className="btn pink lighten-1 z-depth-0"> Sign Up </button>
         </div>
+        {error ? (
+          <div>
+            {error}
+          </div>
+        ): null}
+        {emailError ? (
+          <div>
+            {emailError}
+          </div>
+        ): null}
+
       </form>
     </div>
-    
   );
 
 }
