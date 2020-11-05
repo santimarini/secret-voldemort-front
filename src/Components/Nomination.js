@@ -63,6 +63,7 @@ function Nomination(props) {
       }, 2500);
     };
 
+  
     return(
         <div>
         {localStorage.getItem("email") === gameInfo.minister.user1 ? (
