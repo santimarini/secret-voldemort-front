@@ -10,7 +10,7 @@ const ENDPOINT_G = "http://0.0.0.0:8000/newgame";
 
 function Game(props) {
   const [gameInfo, setGameInfo] = useState({
-    email: "",
+    token: "",
     name: "",
     max_players: 10,
   });
@@ -22,8 +22,7 @@ function Game(props) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    gameInfo.email = localStorage.getItem("email");
-    console.log(gameInfo);
+    gameInfo.token = localStorage.getItem("token");
     // check game name length
     if (
       gameInfo.name.length < DATA_FORMAT.min ||
