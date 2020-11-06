@@ -11,6 +11,7 @@ function Profile(props) {
   }, []);
 
   const logout = () => {
+    localStorage.removeItem("token")
     localStorage.removeItem("email")
   }
 
