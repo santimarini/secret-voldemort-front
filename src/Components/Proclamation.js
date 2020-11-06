@@ -12,6 +12,7 @@ function Proclamation(props) {
   const [minDiscarded, setMinDiscarded] = useState(false);
   const [disabled, setDisabled] = useState(false);
 
+
   const handleSubmit = async (e) => {
     try {
       if (localStorage.getItem("email") === gameInfo.minister) {
@@ -38,6 +39,7 @@ function Proclamation(props) {
       alert(err);
     }
   };
+
 
   // on component mount
   useEffect(() => {
@@ -67,6 +69,7 @@ function Proclamation(props) {
     getInfo();
   }, []);
 
+      
   async function askIsProclaimed() {
     try {
       let response = await axios.get(
@@ -90,6 +93,7 @@ function Proclamation(props) {
     }
   }
 
+  
   const triggerPolling = () => {
     interval = setInterval(function () {
       askIsProclaimed();
@@ -98,6 +102,7 @@ function Proclamation(props) {
 
   var interval = null;
 
+    
   return (
     <div class className="container">
       {localStorage.getItem("email") === gameInfo.minister && (
