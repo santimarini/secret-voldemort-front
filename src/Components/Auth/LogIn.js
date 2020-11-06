@@ -25,7 +25,8 @@ function LogIn(props) {
 
     axios.post(server_uri, bodyFormData) 
     .then(response => {
-      localStorage.setItem("email", response.data.access_token)
+      localStorage.setItem("token", response.data.access_token)
+      localStorage.setItem("alias", response.data.alias)
       props.history.push("/profile")
     })
     .catch(error=> {
