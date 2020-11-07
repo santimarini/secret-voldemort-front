@@ -11,8 +11,8 @@ function Profile(props) {
   }, []);
 
   const logout = () => {
-    localStorage.removeItem("token")
-    localStorage.removeItem("alias")
+    localStorage.removeItem("token");
+    localStorage.removeItem("alias");
   }
 
   return (
