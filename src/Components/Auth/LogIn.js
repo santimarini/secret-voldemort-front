@@ -11,35 +11,35 @@ function LogIn(props) {
   const [err, setErr] = useState('')
 
   // get all user inputs
-  const handleChange = (e) => {
+  const updateUserInfo = (e) => {
     setUserInfo({ ...userInfo, [e.target.name]: e.target.value });
   };
 
   // send to the back the request when user accepts the form
-  const handleSubmit = (e) => {
+  const sendUserInfo = async (e) => {
     e.preventDefault();
 
     var bodyFormData = new FormData();
     bodyFormData.append('username', userInfo.email);
     bodyFormData.append('password', userInfo.password);
-
-    axios.post(server_uri, bodyFormData) 
-    .then(response => {
-      localStorage.setItem("email", response.data.access_token)
-      props.history.push("/profile")
-    })
-    .catch(error=> {
+    try {
+        let response = await axios.post(server_uri, bodyFormData);
+        localStorage.setItem("token", response.data.access_token);
+        localStorage.setItem("alias", response.data.alias);
+        props.history.push("/profile");
+    }
+    catch(error) {
+      //set error message
       if (error.response.status === 404)
-        setErr(error.response.data.detail)
+        setErr(error.response.data.detail);
       else
-        setErr(error)
-    })
-
+        setErr(error);
+    }
   };
 
   return (
     <div className="container">
-      <form onSubmit={handleSubmit} className="white">
+      <form onSubmit={sendUserInfo} className="white">
         <h2 className="grey-text text-darken-3">Login for play!</h2>
         <div className="input-field">
           <label htmlFor="text">Email: </label>
@@ -47,7 +47,7 @@ function LogIn(props) {
             type="email"
             id="username"
             name="email"
-            onChange={handleChange}
+            onChange={updateUserInfo}
             required
           />
         </div>
@@ -55,9 +55,9 @@ function LogIn(props) {
           <label htmlFor="email">Password: </label>
           <input
             type="password"
-            id="email"
+            id="password"
             name="password"
-            onChange={handleChange}
+            onChange={updateUserInfo}
             required
           />
         </div>
@@ -71,3 +71,4 @@ function LogIn(props) {
 }
 
 export default LogIn;
+
