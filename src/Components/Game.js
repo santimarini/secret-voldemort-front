@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-import getToken from "../Util/HelperFunctions";
+import { getToken } from "../Util/HelperFunctions";
 
 //username and password lengths
 const DATA_FORMAT = {
@@ -13,12 +13,12 @@ const ENDPOINT_G = "http://0.0.0.0:8000/newgame";
 
 function Game(props) {
   const [gameInfo, setGameInfo] = useState({
-    token: "",
+    token: getToken(),
     name: "",
     max_players: 10,
   });
   const [error, setError] = useState("");
-  const [jwtHeader] = useState({"Authorization" : `Bearer ${getToken()}`});
+  const [jwtHeader] = useState({"Authorization" : `Bearer ${gameInfo.token}`});
 
   const updateGameInfo = (e) => {
     setGameInfo({ ...gameInfo, [e.target.name]: e.target.value });
@@ -26,7 +26,6 @@ function Game(props) {
 
   const createGame = async (e) => {
     e.preventDefault();
-    gameInfo.token = getToken(); 
     // check game name length
     if (
       gameInfo.name.length < DATA_FORMAT.min ||
