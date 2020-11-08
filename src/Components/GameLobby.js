@@ -53,8 +53,8 @@ function GameLobby(props) {
 
   async function askIsStarted() {
       try {
-        let response = await axios.get(`http://localhost:8000/game/phase?game_name=${gameInfo.gamename}`)
-        if (response.data !== 0){
+        let response = await axios.get(`http://localhost:8000/phase?game_name=${gameInfo.gamename}`)
+        if (response.data.phase_game !== 0){
           clearInterval(interval)
           setStarted(true)
         }
