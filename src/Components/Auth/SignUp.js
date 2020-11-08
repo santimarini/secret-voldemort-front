@@ -1,7 +1,7 @@
 import React, { useState }  from 'react'
 import axios from 'axios'
 
-//username and password lengths
+//alias and password lengths
 const DATA_FORMAT = {
   min: 4,
   max: 16
@@ -12,7 +12,7 @@ const ENDPOINT_SU = 'http://0.0.0.0:8000/signup'
 function SignUp(props) {
 
   const [userInfo, setUserInfo] = useState({
-    username: '',
+    alias: '',
     email: '',
     password: ''
   })
@@ -30,16 +30,16 @@ function SignUp(props) {
     setEmailError('')
     //check userInfo length
     try {
-      if (userInfo.username.length < DATA_FORMAT.min ||
-       DATA_FORMAT.max < userInfo.username.length)
-        throw Error("username")
+      if (userInfo.alias.length < DATA_FORMAT.min ||
+       DATA_FORMAT.max < userInfo.alias.length)
+        throw Error("alias")
       if (userInfo.password.length < DATA_FORMAT.min ||
        DATA_FORMAT.max < userInfo.password.length)
         throw Error("password")
       //if all ok, send post request to backend
       try { 
         await axios.post(ENDPOINT_SU, userInfo) 
-        alert(`Welcome ${userInfo.username}! Log in for play!`)
+        alert(`Welcome ${userInfo.alias}! Log in for play!`)
         props.history.push("/login")
       }
       catch (error) {
@@ -61,7 +61,7 @@ function SignUp(props) {
         <h3 className="grey-text text-darken-3">Sign up for play!</h3>
         <div className="input-field">
           <label htmlFor="text"> Alias: </label>
-          <input type="text" id="alias" name="username" 
+          <input type="text" id="alias" name="alias" 
             onChange={handleChange} required/>
         </div>
         <div className="input-field">
