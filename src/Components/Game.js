@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import axios from "axios";
 
+import getToken from "../Util/HelperFunctions";
+
 //username and password lengths
 const DATA_FORMAT = {
   min: 4,
   max: 16,
 };
 const ENDPOINT_G = "http://0.0.0.0:8000/newgame";
+
 
 function Game(props) {
   const [gameInfo, setGameInfo] = useState({
@@ -15,14 +18,15 @@ function Game(props) {
     max_players: 10,
   });
   const [error, setError] = useState("");
+  const [jwtHeader] = useState({"Authorization" : `Bearer ${getToken()}`});
 
-  const handleChange = (e) => {
+  const updateGameInfo = (e) => {
     setGameInfo({ ...gameInfo, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
+  const createGame = async (e) => {
     e.preventDefault();
-    gameInfo.token = localStorage.getItem("token");
+    gameInfo.token = getToken(); 
     // check game name length
     if (
       gameInfo.name.length < DATA_FORMAT.min ||
@@ -38,7 +42,7 @@ function Game(props) {
       );
     }
     try {
-      let response = await axios.post(ENDPOINT_G, gameInfo);
+      let response = await axios.post(ENDPOINT_G, gameInfo, { headers: jwtHeader });
       alert(
         "Game created! Its name is " +
           response.data.name +
@@ -54,7 +58,7 @@ function Game(props) {
 
   return (
     <div class className="game-container">
-      <form onSubmit={handleSubmit} className="white">
+      <form onSubmit={createGame} className="white">
         <h3 className="grey-text text-darken-3">Play game</h3>
         <div className="input-field">
           <label htmlFor="text">Game Name:</label>
@@ -62,7 +66,7 @@ function Game(props) {
             type="text"
             id="game_name"
             name="name"
-            onChange={handleChange}
+            onChange={updateGameInfo}
             required
           />
         </div>
@@ -74,7 +78,7 @@ function Game(props) {
             name="max_players"
             min="5"
             max="5"
-            onChange={handleChange}
+            onChange={updateGameInfo}
             required
           />
         </div>
