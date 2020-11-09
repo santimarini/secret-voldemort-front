@@ -21,7 +21,7 @@ function Nomination(props) {
       await axios.put(
         `http://localhost:8000/game?game_name=${gameInfo.game_name}&dir=${nominationInfo.director}`
       );
-      props.handleCount(2);
+      props.setPhase(2);
     } catch (err) {
       alert(err);
     }
@@ -31,7 +31,7 @@ function Nomination(props) {
     async function onElection() {
       gameInfo.game_name = props.game_name;
       try {
-        let response = await axios.post(
+        const response = await axios.post(
           `http://localhost:8000/next_turn?game_name=${gameInfo.game_name}`
         );
         setGameInfo({
@@ -46,16 +46,16 @@ function Nomination(props) {
     onElection();
   }, [gameInfo, props.game_name]);
 
-  var interval = null;
+  let interval = null;
 
   async function askIsNominated() {
     try {
-      let response = await axios.get(
+      const response = await axios.get(
         `http://localhost:8000/phase?game_name=${props.game_name}`
       );
       if (response.data.phase_game === 2) {
         clearInterval(interval);
-        props.handleCount(2);
+        props.setPhase(2);
       }
     } catch (err) {
       alert(err);
@@ -63,7 +63,7 @@ function Nomination(props) {
   }
 
   const triggerPolling = () => {
-    interval = setInterval(function () {
+    interval = setInterval(() => {
       askIsNominated();
     }, 2500);
   };
@@ -71,8 +71,8 @@ function Nomination(props) {
   return (
     <div>
       {userEmail === gameInfo.minister.user1 ? (
-        <div class className="container">
-          <div class className="notification">
+        <div className className="container">
+          <div className className="notification">
             You have been nominated as Minister of Magic.
           </div>
           <p>Please select a player to nominate as Director.</p>
