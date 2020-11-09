@@ -1,29 +1,28 @@
-import React, { useState } from "react";
-import {Redirect} from "react-router-dom";
+import React, { useState } from 'react';
 
-import Nomination from "./Nomination";
-import Voting from "./Voting";
-import Proclamation from "./Proclamation";
-import Profile from "./Auth/Profile";
+import Nomination from './Nomination';
+import Voting from './Voting';
+import Proclamation from './Proclamation';
+import Profile from './Auth/Profile';
 
 function InGame(props) {
-  const [gameInfo, setGameInfo] = useState({
+  const [gameInfo] = useState({
     game_name: props.game_name,
   });
 
   const [phaseCount, setPhaseCount] = useState(1);
-  const [profile, setProfile] = useState(false)
-  
-  function handleCount(value) {
+  const [profile, setProfile] = useState(false);
+
+  function setPhase(value) {
     setPhaseCount(value);
   }
 
   switch (phaseCount) {
     case 1:
       return (
-        <div class className="nomination">
+        <div className className="nomination">
           <Nomination
-            handleCount={handleCount}
+            setPhase={setPhase}
             game_name={gameInfo.game_name}
           />
         </div>
@@ -31,30 +30,30 @@ function InGame(props) {
     case 2:
       return (
         <div>
-          <Voting handleCount={handleCount} game_name={gameInfo.game_name} />
+          <Voting setPhase={setPhase} game_name={gameInfo.game_name} />
         </div>
       );
     case 3:
       return (
         <div>
-          <Proclamation handleCount={handleCount} game_name={gameInfo.game_name}/>
+          <Proclamation setPhase={setPhase} game_name={gameInfo.game_name} />
         </div>
       );
     case 4:
       return (
         <div>
-            { !profile ? (
+          { !profile ? (
             <div>
-                <h3> Game ended. </h3>
-                <div>
-                  <button onClick={() => setProfile(true)}> Go to profile </button>
-                </div>
+              <h3> Game ended. </h3>
+              <div>
+                <button onClick={() => setProfile(true)}> Go to profile </button>
+              </div>
             </div>
-            ) : <Profile/>}
+          ) : <Profile />}
         </div>
-      ) 
+      );
     default:
-      return <div>No Conocido</div>;
+      return <div>Something went wrong.</div>;
   }
 }
 
