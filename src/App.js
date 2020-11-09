@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
-import './App.css'
+
+import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 import AuthRoute from './ProtectedRoutes/AuthRoute'
 import NoLogged from './ProtectedRoutes/NoLogged'
