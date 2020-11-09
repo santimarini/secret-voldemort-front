@@ -44,7 +44,7 @@ function Nomination(props) {
       }
     }
     onElection();
-  }, [gameInfo, props.game_name]);
+  }, []);
 
   let interval = null;
 
