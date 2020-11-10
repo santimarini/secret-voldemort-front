@@ -52,3 +52,30 @@
   margin-right: 20px;
   margin-top: 10px
 }
+
+/*Login*/
+#btn-form{
+  background-color: #04332b;
+}
+
+#text-form{
+  text-align: left;
+}
+
+#title-form{
+  color: #04332b;
+}
+
+#card-form{
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+#error-msg{
+  color: #f24b3f;
+  margin-top: 10px;
+}

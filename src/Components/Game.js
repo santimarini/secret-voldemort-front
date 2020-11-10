@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import {Card, Button, Form} from 'react-bootstrap'
 
 import { getToken } from "../Util/HelperFunctions";
 
@@ -8,7 +9,7 @@ const DATA_FORMAT = {
   min: 4,
   max: 16,
 };
-const ENDPOINT_G = "http://0.0.0.0:8000/newgame";
+const ENDPOINT_G = "http://localhost:8000/newgame";
 
 
 function Game(props) {
@@ -57,38 +58,40 @@ function Game(props) {
 
   return (
     <div class className="game-container">
-      <form onSubmit={createGame} className="white">
-        <h3 className="grey-text text-darken-3">Play game</h3>
-        <div className="input-field">
-          <label htmlFor="text">Game Name:</label>
-          <input
-            type="text"
-            id="game_name"
-            name="name"
-            onChange={updateGameInfo}
-            required
-          />
-        </div>
-        <div className="input-field">
-          <label htmlFor="number">Max. Players::</label>
-          <input
-            type="number"
-            id="max_players"
-            name="max_players"
-            min="5"
-            max="5"
-            onChange={updateGameInfo}
-            required
-          />
-        </div>
-        <div className="input-field">
-          <button className="btn pink lighten-1 z-depth-0">
-            {" "}
-            Create Game{" "}
-          </button>
-        </div>
-      </form>
-      {error ? <p>{error}</p> : null}
+      <Card bg="light" style={{ width: "25rem" }} id="card-form">
+        <Card.Body>
+          <Card.Title id="title-login">Play Game</Card.Title>
+          <Form id="text-form" onSubmit={createGame}>
+            <Form.Group controlId="formBasicEmail">
+              <Form.Label>Game name</Form.Label>
+              <Form.Control
+                type="text"
+                id="game_name"
+                name="name"
+                onChange={updateGameInfo}
+                required
+                placeholder="Enter game name"
+              />
+            </Form.Group>
+
+            <Form.Group controlId="formBasicPassword">
+              <Form.Label>Max. players</Form.Label>
+              <Form.Control
+                type="number"
+                id="max_players"
+                name="max_players"
+                min="5"
+                max="5"
+                onChange={updateGameInfo}
+                required
+                placeholder="Enter max. players"
+              />
+              {error ? <p id='error-msg'>{error}</p> : null}
+            </Form.Group>
+            <Button id="btn-form" type="submit">Create Game</Button>
+          </Form>
+        </Card.Body>
+      </Card>
     </div>
   );
 }
