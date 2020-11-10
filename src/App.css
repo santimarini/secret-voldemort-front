@@ -53,6 +53,33 @@
   margin-top: 10px
 }
 
+
+.navbar {
+    background-color: rgb(36, 36, 36)
+}
+
+/* The hero image */
+body {
+  width: 100%;
+  height:100%;
+  background: url('Images/voldemort.jpg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size:cover;
+  background-attachment: fixed;
+  display:block;
+}
+
+/* Logo navbar */
+.logo-image{
+    position: absolute;
+    width: auto;
+    height: auto;
+    overflow: hidden; 
+    margin-top: -6px;
+    margin-left: -15px
+}
+
 /*Login*/
 #btn-form{
   background-color: #04332b;

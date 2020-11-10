@@ -9,3 +9,7 @@ export function getEmail() {
   return localStorage.getItem("email");
 }
 
+export function getAlias() {
+
+  return localStorage.getItem("alias");
+}
