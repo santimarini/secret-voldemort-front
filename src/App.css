@@ -70,6 +70,7 @@ body {
   display:block;
 }
 
+/* Logo navbar */
 .logo-image{
     position: absolute;
     width: auto;
@@ -79,3 +80,29 @@ body {
     margin-left: -15px
 }
 
+/*Login*/
+#btn-form{
+  background-color: #04332b;
+}
+
+#text-form{
+  text-align: left;
+}
+
+#title-form{
+  color: #04332b;
+}
+
+#card-form{
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+#error-msg{
+  color: #f24b3f;
+  margin-top: 10px;
+}
