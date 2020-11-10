@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Card, Image } from 'react-bootstrap';
+
 import "../../App.css";
 
-function Profile(props) {
+function Profile() {
   const [alias, setAlias] = useState("");
 
   useEffect(() => {
@@ -10,23 +11,29 @@ function Profile(props) {
     setAlias(user_alias);
   }, []);
 
-  const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("alias");
-  }
-
   return (
     <div>
-      <h2>Welcome!</h2>
-      <h4>{alias}</h4>
-      <Link to="/play">
-        <button className="btn pink lighten-1 z-depth-0"> Create Game </button>
-      </Link>
-      <Link to="/login">
-      <button onClick={logout} className="btn pink lighten-1 z-depth-0 btn-logout">
-        Logout
-      </button>
-      </Link>
+      <Card
+        border="dark"
+        bg="light"
+        style={{ width: "50rem" }}
+        id="card-profile"
+      >
+        <Card.Body>
+          <Card.Title id="title-login">
+            <h3 id="title-form">Profile Information</h3>
+          </Card.Title>
+          <Card.Text>
+            <h5>Username: {alias}</h5>
+          </Card.Text>
+          <Image
+            height="160px"
+            width="160px"
+            src="https://i.imgur.com/xjdz6j8.jpeg"
+            roundedCircle
+          />
+        </Card.Body>
+      </Card>
     </div>
   );
 }

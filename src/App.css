@@ -80,7 +80,7 @@ body {
     margin-left: -15px
 }
 
-/*Login*/
+/*General forms*/
 #btn-form{
   background-color: #04332b;
 }
@@ -105,4 +105,10 @@ body {
 #error-msg{
   color: #f24b3f;
   margin-top: 10px;
+}
+
+/*Profile*/
+#card-profile{
+  margin: 0 auto;
+  margin-top: 50px;
 }
