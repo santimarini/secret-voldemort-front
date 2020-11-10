@@ -80,6 +80,42 @@ body {
     margin-left: -15px
 }
 
+/* Logged user navbar */
+
+/* Email on Navbar*/
+.email-navbar {
+  color: #04332b;
+  text-align: center;
+  font-size: 11px;
+  margin-top:5px;
+}
+
+.home-navbar-1{
+  margin-left:120px;
+}
+
+.play-button {
+}
+
+.dropdown-play {
+  position:relative;
+}
+
+.alias {
+  margin-left:1100px
+}
+
+.alias-desplegated{
+  position:fixed;
+  margin-top:-35px;
+  margin-right:150px;
+}
+
+/* Unlogged user navbar */
+.home-navbar-2 {
+  margin-left:120px;
+}
+
 /*General forms*/
 #btn-form{
   background-color: #04332b;
@@ -112,3 +148,4 @@ body {
   margin: 0 auto;
   margin-top: 50px;
 }
+
