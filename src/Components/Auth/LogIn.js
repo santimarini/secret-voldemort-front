@@ -27,7 +27,7 @@ function LogIn(props) {
       const response = await axios.post(server_uri, bodyFormData);
       localStorage.setItem('token', response.data.access_token);
       localStorage.setItem('alias', response.data.alias);
-      props.history.push('/profile');
+      window.location.href = '/';
     } catch (error) {
       // set error message
       if (error.response.status === 404) { setErr(error.response.data.detail); } else { setErr(error); }
