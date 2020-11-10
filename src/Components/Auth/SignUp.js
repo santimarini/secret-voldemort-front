@@ -1,64 +1,55 @@
-import React, { useState }  from 'react'
-import axios from 'axios'
-import {Card, Button, Form} from 'react-bootstrap'
+import React, { useState } from 'react';
+import axios from 'axios';
+import { Card, Button, Form } from 'react-bootstrap';
 
-//alias and password lengths
+// alias and password lengths
 const DATA_FORMAT = {
   min: 4,
-  max: 16
-}
-const ENDPOINT_SU = 'http://localhost:8000/signup'
-
+  max: 16,
+};
+const ENDPOINT_SU = 'http://localhost:8000/signup';
 
 function SignUp(props) {
-
   const [userInfo, setUserInfo] = useState({
     alias: '',
     email: '',
-    password: ''
-  })
-  const [error, setError] = useState('')
-  const [emailError, setEmailError] = useState('') 
+    password: '',
+  });
+  const [error, setError] = useState('');
+  const [emailError, setEmailError] = useState('');
 
   const handleChange = (e) => {
-    setUserInfo({...userInfo, [e.target.name]: e.target.value})
-  }
+    setUserInfo({ ...userInfo, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    console.log(userInfo)
-    setError('')
-    setEmailError('')
-    //check userInfo length
+    e.preventDefault();
+    setError('');
+    setEmailError('');
+    // check userInfo length
     try {
-      if (userInfo.alias.length < DATA_FORMAT.min ||
-       DATA_FORMAT.max < userInfo.alias.length)
-        throw Error("alias")
-      if (userInfo.password.length < DATA_FORMAT.min ||
-       DATA_FORMAT.max < userInfo.password.length)
-        throw Error("password")
-      //if all ok, send post request to backend
-      try { 
-        await axios.post(ENDPOINT_SU, userInfo) 
-        alert(`Welcome ${userInfo.alias}! Log in for play!`)
-        props.history.push("/login")
-      }
-      catch (error) {
+      if (userInfo.alias.length < DATA_FORMAT.min
+       || DATA_FORMAT.max < userInfo.alias.length) { throw Error('alias'); }
+      if (userInfo.password.length < DATA_FORMAT.min
+       || DATA_FORMAT.max < userInfo.password.length) { throw Error('password'); }
+      // if all ok, send post request to backend
+      try {
+        await axios.post(ENDPOINT_SU, userInfo);
+        alert(`Welcome ${userInfo.alias}! Log in for play!`);
+        props.history.push('/login');
+      } catch (error) {
         if (error.response.status === 404) {
-          setEmailError("Email entered is already registered. Please enter another email.")
-        }
-        else
-          alert(error)
+          setEmailError('Email entered is already registered. Please enter another email.');
+        } else { alert(error); }
       }
-   }
-    catch(err) {
-      setError(`Invalid ${err.message}. Please insert a ${err.message} between ${DATA_FORMAT.min} to ${DATA_FORMAT.max} characters.`)
+    } catch (err) {
+      setError(`Invalid ${err.message}. Please insert a ${err.message} between ${DATA_FORMAT.min} to ${DATA_FORMAT.max} characters.`);
     }
-  }
+  };
 
   return (
-    <div class className="container">
-      <Card bg="light" style={{ width: "25rem" }} id="card-form">
+    <div className className="container">
+      <Card bg="light" style={{ width: '25rem' }} id="card-form">
         <Card.Body>
           <Card.Title id="title-login">Sign up for play!</Card.Title>
           <Form id="text-form" onSubmit={handleSubmit}>
@@ -96,8 +87,8 @@ function SignUp(props) {
                 placeholder="Enter password"
               />
             </Form.Group>
-            {error ? <p id='error-msg'>{error}</p> : null}
-            {emailError ? <p id='error-msg'>{emailError}</p> : null}
+            {error ? <p id="error-msg">{error}</p> : null}
+            {emailError ? <p id="error-msg">{emailError}</p> : null}
             <Button id="btn-form" type="submit">
               Sign Up
             </Button>
@@ -106,7 +97,6 @@ function SignUp(props) {
       </Card>
     </div>
   );
-
 }
 
 export default SignUp;
