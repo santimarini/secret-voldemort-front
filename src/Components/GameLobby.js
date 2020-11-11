@@ -23,9 +23,14 @@ function GameLobby(props) {
     game_name: props.match.params.gamename,
     email: jwt_decode(getToken()).sub,
   };
-
-
+  const [err, setErr] = useState('');
+  const [players, setPlayers] = useState([]);
+  const [isCreatorPolling, setIsCreatorPolling] = useState(false);
+  const [isPlayerPolling, setIsPlayerPolling] = useState(false);
   const server_uri = `http://localhost:8000/game/${join_input.game_name}`;
+  
+  var playerInterval = null; //interval for players
+  var creatorInterval = null; //interval for creator
 
 
   useEffect(() => {
@@ -51,40 +56,55 @@ function GameLobby(props) {
   }, [jwtHeader, server_uri, props.history]);
 
 
-  var interval = null
+
 
   async function askIsStarted() {
+      setIsPlayerPolling(true);
       try {
-        let response = await axios.get(`http://localhost:8000/phase?game_name=${gameInfo.gamename}`)
+        let response = await axios.get(`http://localhost:8000/phase?game_name=${join_input.game_name}`)
         if (response.data.phase_game !== 0){
-          clearInterval(interval)
           setStarted(true)
+          clearInterval(playerInterval);
         }
+        setPlayers(response.data.players_list);
       }
       catch (err) {
-        alert(err.response.data.detail)
+        alert(err.response.data.detail);
       }
   }
-
 
   async function startGame() {
     try {
       let response = await axios.post(
         `http://localhost:8000/start?game_name=${join_input.game_name}`
       );
-      alert(response.data)
-      setStarted(true)
+      setStarted(true);
+      clearInterval(creatorInterval);
     } catch (err) {
-      clearInterval(interval)
+      clearInterval(creatorInterval);
       alert(err);
     }
   };
 
   const triggerPolling = () => {
-    interval = setInterval(function() {
+    playerInterval = setInterval(function() {
       askIsStarted();
     }, 2500)
   }
+
+  async function updateList() {
+    setIsCreatorPolling(true);
+    creatorInterval = setInterval(async function(){
+        try {
+          let response = await axios.get(`http://localhost:8000/get_players?game_name=${join_input.game_name}`)
+        setPlayers(response.data.players_list);
+        }
+        catch (err){
+            alert(err)
+         }
+    }, 2500)
+  }
+
 
   return (
     <div>
@@ -99,21 +119,31 @@ function GameLobby(props) {
       <div>
         <h2 id="title-form" style={{'margin-bottom': '20px'}}> Game Lobby </h2>
         <h4>Alias: {alias} </h4>
-        <h4>Game name: {gameInfo.gamename} </h4>
+        <h4>Game Name: {gameInfo.gamename} </h4>
         <h4>Max players: {gameInfo.max_players} </h4>
+        <ul class="list-group">
+          {players.map((player) => (
+            <li class="list-group-item"> {player.alias} </li>
+          ))}
+        </ul>
+        <h6 id="title-form" style={{ "margin-top": "30px" }}> Waiting for players...</h6>
+
+
       </div>
       }
-      {userEmail  === gameInfo.creator ? (
+      {userEmail === gameInfo.creator && (isCreatorPolling || !updateList()) && (
         <div>
-        {!started && <div>
+        {!started && (<div>
             <Button
               style={{'margin-top': '20px'}}
               id="btn-form"
               onClick={() => startGame()}>
               Start Game
             </Button>
-          </div>}
-      </div>) : triggerPolling()}
+          </div>)}
+        </div>)}
+      {userEmail !== gameInfo.creator && (isPlayerPolling || !triggerPolling())}
+        
       {started && <InGame game_name={gameInfo.gamename}/>}
       </Card.Body>
       </Card>
