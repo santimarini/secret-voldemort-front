@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import jwtDecode from 'jwt-decode';
+import { Button } from 'react-bootstrap'
 
 import { getToken } from '../Util/HelperFunctions';
 
@@ -15,6 +16,7 @@ function Proclamation(props) {
   const [minDiscarded, setMinDiscarded] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const [userEmail] = useState(jwtDecode(getToken()).sub);
+
   let interval = null;
 
   async function askIsProclaimed() {
@@ -105,59 +107,69 @@ function Proclamation(props) {
     <div className className="container">
       {userEmail === gameInfo.minister.user1 && (
         <div className className="notification">
-          <h3>You have to proclaim.</h3>
-          <p>Please choose a card to discard.</p>
-          <select id="min_discarded">
-            {gameInfo.cards.map((card) => (
-              <option value={card.id}>
-                {' '}
-                {card.loyalty}
-                {' '}
-              </option>
-            ))}
-          </select>
-          <button onClick={discardCard} disabled={disabled}>
+          <h4 id="title-form">You have to proclaim.</h4>
+          <h5>Please choose a card to discard.</h5>
+          <div style={{ "margin-top": "35px" }}>
+            <select id="min_discarded">
+              {gameInfo.cards.map((card) => (
+                  <option value={card.id}>
+                  {' '}
+                  {card.loyalty}
+                  {' '}
+                </option>
+              ))}
+            </select>
+          <Button onClick={discardCard} disabled={disabled}
+           style={{ "margin-left": "20px" }}
+           id="btn-form"
+           >
             {' '}
             Discard
             {' '}
-          </button>
-        </div>
+          </Button>
+         </div> 
+       </div>
       )}
       {minDiscarded && userEmail === gameInfo.director.user1 && (
         <div>
-          <h3>You have to proclaim.</h3>
-          <p>Please choose a card to discard.</p>
-          <select id="dir_discarded">
-            {gameInfo.cards.map((card) => (
-              <option value={card.id}>
-                {' '}
-                {card.loyalty}
-                {' '}
-              </option>
-            ))}
-          </select>
-          <button onClick={discardCard} disabled={disabled}>
-            {' '}
-            Discard
-            {' '}
-          </button>
+          <h4 id="title-form">You have to proclaim.</h4>
+          <h5>Please choose a card to discard.</h5>
+          <div style={{ "margin-top": "35px" }}>
+            <select id="dir_discarded">
+              {gameInfo.cards.map((card) => (
+                <option value={card.id}>
+                  {' '}
+                  {card.loyalty}
+                  {' '}
+                </option>
+              ))}
+            </select>
+            <Button onClick={discardCard} disabled={disabled}
+             style={{ "margin-left": "20px" }}
+             id="btn-form"
+             >
+              {' '}
+              Discard
+              {' '}
+            </Button>
+          </div>
         </div>
       )}
       {!minDiscarded
         && userEmail === gameInfo.director.user1
         && triggerPolling()}
       {!minDiscarded && userEmail === gameInfo.director.user1 && (
-        <div>
+        <h4 id="title-form">
           The minister
           {' '}
           {gameInfo.minister.alias}
           {' '}
           is proclaiming.
-        </div>
+        </h4>
       )}
       {userEmail !== gameInfo.minister.user1
         && userEmail !== gameInfo.director.user1 && (
-          <div>
+         <h4 id="title-form">
             The minister
             {' '}
             {gameInfo.minister.alias}
@@ -167,7 +179,7 @@ function Proclamation(props) {
             {gameInfo.director.alias}
             {' '}
             are proclaiming.
-          </div>
+          </h4>
       )}
     </div>
   );
