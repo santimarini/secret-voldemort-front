@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { Button, Card } from 'react-bootstrap';
+
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 
@@ -86,24 +88,35 @@ function GameLobby(props) {
 
   return (
     <div>
+      <Card
+        border="dark"
+        bg="light"
+        style={{ width: "50rem" }}
+        id="card-profile"
+      >
+      <Card.Body>
       {!started &&
       <div>
-        <h2>Alias: {alias} </h2>
-        <h2>Game name: {gameInfo.gamename} </h2>
-        <h2>Max players: {gameInfo.max_players} </h2>
-     </div>
+        <h2 id="title-form" style={{'margin-bottom': '20px'}}> Game Lobby </h2>
+        <h4>Alias: {alias} </h4>
+        <h4>Game name: {gameInfo.gamename} </h4>
+        <h4>Max players: {gameInfo.max_players} </h4>
+      </div>
       }
       {userEmail  === gameInfo.creator ? (
         <div>
         {!started && <div>
-            <button
-              onClick={() => startGame()}
-              className="btn pink lighten-1 z-depth-0">
+            <Button
+              style={{'margin-top': '20px'}}
+              id="btn-form"
+              onClick={() => startGame()}>
               Start Game
-            </button>
+            </Button>
           </div>}
       </div>) : triggerPolling()}
       {started && <InGame game_name={gameInfo.gamename}/>}
+      </Card.Body>
+      </Card>
     </div>
   );
 }

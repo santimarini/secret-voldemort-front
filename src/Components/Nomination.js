@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
+import {Button} from 'react-bootstrap'
 
 import { getToken } from '../Util/HelperFunctions';
 
@@ -72,33 +73,31 @@ function Nomination(props) {
     <div>
       {userEmail === gameInfo.minister.user1 ? (
         <div className className="container">
-          <div className className="notification">
-            You have been nominated as Minister of Magic.
+          <h4 id="title-form">You have been nominated as Minister of Magic.</h4>
+          <h5>Please select a player to nominate as Director.</h5>
+          <div style={{ "margin-top": "35px" }}>
+            <select id="candidate">
+              {gameInfo.players.map((player) => (
+                <option value={player.id}> {player.alias} </option>
+              ))}
+            </select>
+            <Button
+              style={{ "margin-left": "20px" }}
+              id="btn-form"
+              onClick={nominateDirector}
+            >
+              Nominate
+            </Button>
           </div>
-          <p>Please select a player to nominate as Director.</p>
-          <select id="candidate">
-            {gameInfo.players.map((player) => (
-              <option value={player.id}>
-                {' '}
-                {player.alias}
-                {' '}
-              </option>
-            ))}
-          </select>
-          <button onClick={nominateDirector}> Nominate </button>
         </div>
       ) : (
         triggerPolling()
       )}
       {userEmail !== gameInfo.minister.user1 && (
-        <div>
-          The nominated minister
-          {' '}
-          {gameInfo.minister.alias}
-          {' '}
-          is choosing
+        <h4 id="title-form">
+          The nominated minister {gameInfo.minister.alias} is choosing
           director...
-        </div>
+        </h4>
       )}
     </div>
   );

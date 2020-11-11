@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import '../App.css';
 import axios from 'axios';
+import {Button} from 'react-bootstrap'
 
 function Voting(props) {
   const [postulated, setPostulated] = useState({
@@ -63,68 +64,65 @@ function Voting(props) {
 
   return (
     <div>
-      <h2>Time to vote!</h2>
-      <h3>
-        Postulated minister:
-        {postulated.minister}
-      </h3>
-      <h3>
-        Postulated director:
-        {postulated.director}
-      </h3>
-      <h3 style={{ marginTop: '15px' }}> You accept this government? </h3>
+      <h3 id="title-form">Time to vote!</h3>
+      <h4>Postulated minister: {postulated.minister}</h4>
+      <h4>Postulated director: {postulated.director}</h4>
+      <h4 style={{ marginTop: "15px" }}> You accept this government? </h4>
 
-      <button
-        disabled={disabled}
-        onClick={() => sendVote(true)}
-        className="btn pink lighten-1 z-depth-0"
-      >
-        YES
-      </button>
-      <div className="divider" />
-      <button
-        disabled={disabled}
-        onClick={() => sendVote(false)}
-        className="btn pink lighten-1 z-depth-0"
-      >
-        NO
-      </button>
+      <div style={{'margin-top': '35px'}}>
+        <Button
+          id="btn-form"
+          disabled={disabled}
+          onClick={() => sendVote(true)}
+        >
+          YES
+        </Button>
+        <div className="divider" />
+        <Button
+          id="btn-form"
+          disabled={disabled}
+          onClick={() => sendVote(false)}
+        >
+          NO
+        </Button>
+      </div>
 
+      <div style={{'margin-top': '30px'}}>
       {Object.keys(voteInfo).map((key) => {
         switch (key) {
-          case 'cant_vote':
+          case "cant_vote":
             return (
-              <p key={key}>
+              <h5 key={key}>
                 Votes:
                 {voteInfo[key]}
-              </p>
+              </h5>
             );
-          case 'vote_less':
+          case "vote_less":
             return (
-              <p key={key}>
+              <h5 key={key}>
                 Remaining votes:
                 {voteInfo[key]}
-              </p>
+              </h5>
             );
-          case 'status_vote':
-            return <p key={key}>{voteInfo[key]}</p>;
-          case 'elect_min':
+          case "status_vote":
+            return <h5 key={key}>{voteInfo[key]}</h5>;
+          case "elect_min":
             return (
-              <p key={key}>
-                Minister Elected:
-                {voteInfo[key].alias}
-              </p>
+              <h5 key={key}>
+                Minister Elected: {voteInfo[key].alias}
+              </h5>
             );
-          case 'elect_dir':
+          case "elect_dir":
             return (
-              <p key={key}>
-                Director Elected:
-                {voteInfo[key].alias}
-              </p>
+              <h5 key={key}>
+                Director Elected: {voteInfo[key].alias}
+              </h5>
             );
-          default: return null;
+          default:
+            return null;
         }
       })}
+      </div>
     </div>
   );
 }
