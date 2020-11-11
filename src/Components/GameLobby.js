@@ -28,6 +28,10 @@ function GameLobby(props) {
   const [isCreatorPolling, setIsCreatorPolling] = useState(false);
   const [isPlayerPolling, setIsPlayerPolling] = useState(false);
   const server_uri = `http://localhost:8000/game/${join_input.game_name}`;
+  
+  var playerInterval = null; //interval for players
+  var creatorInterval = null; //interval for creator
+
 
   useEffect(() => {
     async function joinGame() {
@@ -52,8 +56,6 @@ function GameLobby(props) {
   }, [jwtHeader, server_uri, props.history]);
 
 
-  var playerInterval = null
-  var creatorInterval = null;
 
 
   async function askIsStarted() {
@@ -76,7 +78,6 @@ function GameLobby(props) {
       let response = await axios.post(
         `http://localhost:8000/start?game_name=${join_input.game_name}`
       );
-      alert(response.data);
       setStarted(true);
       clearInterval(creatorInterval);
     } catch (err) {
@@ -84,6 +85,7 @@ function GameLobby(props) {
       alert(err);
     }
   };
+
   const triggerPolling = () => {
     playerInterval = setInterval(function() {
       askIsStarted();
@@ -124,13 +126,14 @@ function GameLobby(props) {
             <li class="list-group-item"> {player.alias} </li>
           ))}
         </ul>
+        <h6 id="title-form" style={{ "margin-top": "30px" }}> Waiting for players...</h6>
+
 
       </div>
       }
       {userEmail === gameInfo.creator && (isCreatorPolling || !updateList()) && (
         <div>
         {!started && (<div>
-            <h6 id="title-form" style={{ "margin-top": "30px" }}> Waiting for players...</h6>
             <Button
               style={{'margin-top': '20px'}}
               id="btn-form"
@@ -139,11 +142,7 @@ function GameLobby(props) {
             </Button>
           </div>)}
         </div>)}
-      {userEmail !== gameInfo.creator && (isPlayerPolling || !triggerPolling()) && (
-        <div>
-          <h6 id="title-form" style={{ "margin-top": "30px" }}> Waiting for players...</h6>
-        </div>
-      )}
+      {userEmail !== gameInfo.creator && (isPlayerPolling || !triggerPolling())}
         
       {started && <InGame game_name={gameInfo.gamename}/>}
       </Card.Body>
