@@ -51,8 +51,7 @@ function Voting(props) {
         setWin(true)
       } else if (response.data.phase_game === 1) {
         clearInterval(interval);
-        setEndVote(true)
-        setWin(false)
+        goToNomination()
       }
     } catch (err) {
       clearInterval(interval);
@@ -104,7 +103,6 @@ function Voting(props) {
         {endVote ? (
           <VotingResult
             voteResults={voteInfo}
-            backwards={goToNomination}
             forward={goToProclamation}
             win={win}
             gamename={game_name}
