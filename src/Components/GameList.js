@@ -5,14 +5,25 @@ import axios from "axios";
 
 function GameList(props) {
   const [games, setGames] = useState([]);
+  const [refresh, setRefresh] = useState(false)
+  const [error, setError] = useState('')
   const server_uri = "http://localhost:8000/show_games";
 
-  const joinGame = (gamename) => {
-    props.history.push(`/game/${gamename}`)
-  }
+  const joinGame = async (gamename) => {
+    await axios
+      .get(`http://localhost:8000/game_is_started?game_name=${gamename}`)
+      .then((response) => {
+        if (response.data.status === 'started') {
+          setError('The game already started. Please refresh.')
+        } else {
+          props.history.push(`/game/${gamename}`);
+        }
+      });
+  };
 
   useEffect(() => {
     async function getGames() {
+      setError('')
       await axios
         .get(server_uri)
         .then((response) => {
@@ -23,7 +34,7 @@ function GameList(props) {
         });
     }
     getGames();
-  }, []);
+  }, [refresh]);
 
   return (
     <div>
@@ -34,8 +45,16 @@ function GameList(props) {
         id="card-profile"
       >
         <Card.Body>
+          <Button
+            onClick={() => setRefresh(!refresh)}
+            id="btn-form"
+            style={{ float: "right", "font-size": "11px" }}
+          >
+            Refresh list
+          </Button>
           <Card.Title id="title-login">
             <h3 id="title-form">Current Games</h3>
+            {error ? <p id='error-msg'>{error}</p> : null}
           </Card.Title>
           <Card.Text>
             <ListGroup as="ul">
