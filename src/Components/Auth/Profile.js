@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Card, Image } from 'react-bootstrap';
 
 import "../../App.css";
+import ChangePass from './ChangePass'
 
 function Profile() {
   const [alias, setAlias] = useState("");
@@ -33,6 +34,8 @@ function Profile() {
             roundedCircle
           />
         </Card.Body>
+
+        <ChangePass />
       </Card>
     </div>
   );
