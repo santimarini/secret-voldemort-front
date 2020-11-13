@@ -1,16 +1,20 @@
 import React, {useState} from 'react';
-import { Accordion, Button, Card } from 'react-bootstrap';
+import { Accordion, Button, Card, Image } from 'react-bootstrap';
 import './UploadPhoto';
 import { getToken } from '../../Util/HelperFunctions';
 import axios from 'axios';
 
 function UploadPhoto() {
 
-const [fileInputState, setFileInputState] = useState('');
+    const [fileInputState, setFileInputState] = useState('');
     const [previewSource, setPreviewSource] = useState('');
     const [selectedFile, setSelectedFile] = useState();
+    var [imageUrl]  = useState('');
     const [successMsg, setSuccessMsg] = useState('');
     const [errMsg, setErrMsg] = useState('');
+    var CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dsmdvuj2y/image/upload'
+    var CLOUDINARY_UPLOAD_PRESET = 'h2panuf3';
+
     const handleFileInputChange = (e) => {
         const file = e.target.files[0];
         previewFile(file);
@@ -27,6 +31,7 @@ const [fileInputState, setFileInputState] = useState('');
 
     const handleSubmitFile = (e) => {
         e.preventDefault();
+
         if (!selectedFile) return;
         const reader = new FileReader();
         reader.readAsDataURL(selectedFile);
@@ -37,19 +42,38 @@ const [fileInputState, setFileInputState] = useState('');
             setErrMsg('something went wrong!');
         };
     };
+    
+    async function uploadToCloudinary() {
+        const formData = new FormData();
+        formData.append("file", selectedFile);
+        formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+        formData.append("api_key", "633493237248468");
 
-    const uploadImage = async (base64EncodedImage) => {
+        await axios({
+          url: CLOUDINARY_URL,
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-urlencoded'
+          },
+          data: formData
+        }).then(function(response) {
+            imageUrl = response.data.url;
+            console.log(imageUrl);
+        }).catch(function(err) {
+            console.log(err);
+        })
+    }
+
+
+    const uploadImage = async () => {
         try {
-            let file = new FormData();
-            file.append('file', selectedFile);
-            await axios.post('http://localhost:8000/upload_image', file,
-                {headers: { 'Content-Type': 'multipart/form-data',
-                'Authorization': `Bearer ${getToken()}`},
-            });
+            await uploadToCloudinary();
+            await axios.post(`http://localhost:8000/upload_image?photo=${imageUrl}`, 
+                {}, {headers: {'Authorization': `Bearer ${getToken()}`}}
+            );
             setFileInputState('');
             setPreviewSource('');
             setSuccessMsg('Photo uploaded successfully!');
-            console.log(successMsg)
         } catch (err) {
             setErrMsg('Something went wrong!');
         }
@@ -65,7 +89,6 @@ const [fileInputState, setFileInputState] = useState('');
                 </Card.Header>
                 <Accordion.Collapse eventKey="0">
                   <Card.Body>
-               
                     <form onSubmit={handleSubmitFile} className="form">
                         <input
                             id="fileInput"
@@ -79,15 +102,34 @@ const [fileInputState, setFileInputState] = useState('');
                            Upload Photo 
                         </Button>
                     </form>
-                    {previewSource && (
-                        <img
-                            src={previewSource}
-                            alt="chosen"
-                            style={{ height: '300px' }}
-                        />
-                    )}
-                      {successMsg && <h6 style={{"margin-top":"45px", "color":"#008000"}}> {successMsg} </h6>}
-                      {errMsg && <h6 style={{"margin-top":"45px", "color":"#FF0000"}}> {errMsg} </h6>}
+                    {previewSource ? (
+                        <div>
+                            <Image style={{"margin-top":"80px"}}
+                                height="160px"
+                                width="160px"
+                                src={previewSource}
+                                alt="chosen"
+                                roundedCircle
+                            />
+                            <h6 style={{"margin-top":"25px"}}> <small> Preview</small> </h6>
+                        </div>
+                    ):<div>
+                        <h6 style={{"margin-top":"40px","color":"#FF0000"}}> 
+                            <small> 
+                                It is recommended that profile photo be 160px x 160px.
+
+                            </small>
+                        </h6>
+                        <h6 style={{"margin-top":"10px", "color":"#8b0000"}}>
+                            <small>
+                                If the selected photo is larger than indicated, it will be cropped to that size! <span style={{'font-size':'18px'}}>&#128556;</span>
+
+                            </small>
+                        </h6>
+                    </div>}
+
+                    {successMsg && <h6 style={{"margin-top":"45px", "color":"#008000"}}> {successMsg} </h6>}
+                    {errMsg && <h6 style={{"margin-top":"45px", "color":"#FF0000"}}> {errMsg} </h6>}
                 </Card.Body>
               </Accordion.Collapse>
            </Card>
