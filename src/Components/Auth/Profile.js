@@ -1,12 +1,12 @@
 import React, { useEffect, useState, setState } from "react";
 import axios from 'axios';
 import { Card, Image } from 'react-bootstrap';
-import UploadPhoto from './UploadPhoto';
 import { getToken } from '../../Util/HelperFunctions';
 
 import "../../App.css";
-import ChangePass from './ChangePass'
-
+import ChangeAlias from './ChangeAlias';
+import ChangePass from './ChangePass';
+import UploadPhoto from './UploadPhoto';
 
 function Profile() {
   const [alias, setAlias] = useState("");
@@ -33,10 +33,8 @@ function Profile() {
         })
     }
     getProfileInfo();
-    console.log(userImage)
   }, []);
        
-console.log(userImage)
   return (
     <div>
       <Card
@@ -61,9 +59,9 @@ console.log(userImage)
             />
           } 
         </Card.Body>
-        
+        <ChangeAlias /> 
         <ChangePass />
-        <UploadPhoto/>
+        <UploadPhoto />
       </Card>
     </div>
   );

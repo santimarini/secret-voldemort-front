@@ -78,13 +78,9 @@ function ChangePass() {
                 Change
               </Button>
 
-              <div style={{ float: "right" }}>
-                {success ? (
-                  <p style={{ color: "#32a844" }}>{success} !</p>
-                ) : (
-                  <p id="error-msg">{error}</p>
-                )}
-              </div>
+              {success && <h6 style={{"margin-top":"-30px", "color":"#008000"}}> <center> {success} </center> </h6>}
+              {error && <h6 style={{"margin-top":"-30px", "color":"#FF0000"}}><center> {error} </center> </h6>}
+
             </Form>
           </Card.Body>
         </Accordion.Collapse>

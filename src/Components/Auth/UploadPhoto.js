@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { Accordion, Button, Card, Image } from 'react-bootstrap';
+import { Accordion, Button, Card, Form, Image } from 'react-bootstrap';
 import './UploadPhoto';
 import { getToken } from '../../Util/HelperFunctions';
 import axios from 'axios';
@@ -14,7 +14,7 @@ function UploadPhoto() {
     const [errMsg, setErrMsg] = useState('');
     var CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dsmdvuj2y/image/upload'
     var CLOUDINARY_UPLOAD_PRESET = 'h2panuf3';
-
+    var CLOUDINARY_API_KEY = '633493237248468';
     const handleFileInputChange = (e) => {
         const file = e.target.files[0];
         previewFile(file);
@@ -47,7 +47,7 @@ function UploadPhoto() {
         const formData = new FormData();
         formData.append("file", selectedFile);
         formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
-        formData.append("api_key", "633493237248468");
+        formData.append("api_key", CLOUDINARY_API_KEY);
 
         await axios({
           url: CLOUDINARY_URL,
@@ -65,7 +65,7 @@ function UploadPhoto() {
     }
 
 
-    const uploadImage = async () => {
+    const uploadImage = async () => { //send image url to backend
         try {
             await uploadToCloudinary();
             await axios.post(`http://localhost:8000/upload_image?photo=${imageUrl}`, 
@@ -85,12 +85,12 @@ function UploadPhoto() {
               <Card>
                 <Card.Header>
                   <Accordion.Toggle as={Button} variant="link" eventKey="0">
-                     <h5 className="title">Upload an Image</h5>
+                    Upload an Image
                   </Accordion.Toggle>
                 </Card.Header>
                 <Accordion.Collapse eventKey="0">
                   <Card.Body>
-                    <form onSubmit={handleSubmitFile} className="form">
+                      <Form style={{"margin-top": "45px"}} onSubmit={handleSubmitFile} className="form">
                         <input
                             id="fileInput"
                             type="file"
@@ -102,7 +102,7 @@ function UploadPhoto() {
                         <Button id="btn-form" className="btn" type="submit">
                            Upload Photo 
                         </Button>
-                    </form>
+                    </Form>
                     {previewSource ? (
                         <div>
                             <Image style={{"margin-top":"80px"}}
@@ -114,7 +114,8 @@ function UploadPhoto() {
                             />
                             <h6 style={{"margin-top":"25px"}}> <small> Preview</small> </h6>
                         </div>
-                    ):<div>
+                    ): !successMsg && !errMsg && 
+                    <div>
                         <h6 style={{"margin-top":"40px","color":"#FF0000"}}> 
                             <small> 
                                 It is recommended that profile photo be 160px x 160px.
@@ -127,10 +128,12 @@ function UploadPhoto() {
 
                             </small>
                         </h6>
-                    </div>}
+                    </div>
+                    }
 
                     {successMsg && <h6 style={{"margin-top":"45px", "color":"#008000"}}> {successMsg} </h6>}
                     {errMsg && <h6 style={{"margin-top":"45px", "color":"#FF0000"}}> {errMsg} </h6>}
+
                 </Card.Body>
               </Accordion.Collapse>
            </Card>
