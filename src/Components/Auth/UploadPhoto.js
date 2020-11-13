@@ -74,6 +74,7 @@ function UploadPhoto() {
             setFileInputState('');
             setPreviewSource('');
             setSuccessMsg('Photo uploaded successfully!');
+            setTimeout(() => { window.location.href = '/profile' }, 2000);
         } catch (err) {
             setErrMsg('Something went wrong!');
         }
