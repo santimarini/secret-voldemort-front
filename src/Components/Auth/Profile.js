@@ -5,6 +5,7 @@ import UploadPhoto from './UploadPhoto';
 import { getToken } from '../../Util/HelperFunctions';
 
 import "../../App.css";
+import ChangePass from './ChangePass'
 
 
 function Profile() {
@@ -12,15 +13,6 @@ function Profile() {
   const [jwtHeader] = useState({ Authorization: `Bearer ${getToken()}` });
   const [userImage, setUserImage] = useState('');
   const [previewSource, setPreviewSource] = useState('');
-
-  const previewFile = (file) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onloadend = () => {
-      setPreviewSource(reader.result);
-      };
-    };  
-
 
   useEffect(() => {
     async function getProfileInfo() {
@@ -69,6 +61,8 @@ console.log(userImage)
             />
           } 
         </Card.Body>
+        
+        <ChangePass />
         <UploadPhoto/>
       </Card>
     </div>
