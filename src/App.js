@@ -13,6 +13,7 @@ import SignUp from './Components/Auth/SignUp';
 import Game from './Components/Game';
 import GameLobby from './Components/GameLobby';
 import Navbar from './Components/Navbar';
+import GameList from './Components/GameList'
 
 class App extends Component {
   render() {
@@ -29,6 +30,7 @@ class App extends Component {
           <NoLogged path="/profile" component={Profile} />
           <NoLogged path="/play" component={Game} />
           <NoLogged path="/game/:gamename" component={GameLobby} />
+          <NoLogged path="/games" component={GameList} />
         </div>
       </BrowserRouter>
     );
