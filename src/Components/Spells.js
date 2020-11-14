@@ -4,43 +4,20 @@ import axios from 'axios'
 
 import jwt_decode from 'jwt-decode';
 import { getToken } from '../Util/HelperFunctions';
+import Adivination from './Adivination'
 
 function Spells(props) {
   const spell = props.spellName;
-  const [minister, setMinister] = useState('')
-  const [userEmail] = useState(jwt_decode(getToken()).sub);
 
-  useEffect(() => {
-    async function getElected(){
-      await axios
-      .get(`http://localhost:8000/dirmin_elect?game_name=${props.game_name}`)
-      .then((response) => {
-        setMinister(response.data.elect_min.user1)
-      })
-      .catch((error) => {
-        alert(error);
-      });
-    }
-    getElected()
-  }, [])
-
-  return (
-    <div>
-      {spell === "Guess" && userEmail === minister && (
-        <div>
-          <h4 id="title-form">Adivination!</h4>
-          <h5>These are the 3 top cards of the deck:</h5>
-        </div>
-      )}
-      {spell === "Guess" && userEmail !== minister && (
-        <h4 id="title-form">The minister throw 'Adivination' and is guessing...</h4>
+  switch(spell){
+    case 'Guess':
+      return (
+        <Adivination setPhase={props.setPhase} game_name={props.game_name} />
       )
-      }
-      
-    </div>
-  );
+    default:
+      return <p>pepega</p>
+  }
 }
-
 export default Spells;
 
 /*const [timeLeft, setTimeLeft] = useState(30)
@@ -56,8 +33,7 @@ export default Spells;
     };*/
 
 /*
-{spell === "Guess" && userEmail !== minister && (
-        <h4 id="title-form">The minister throw 'Adivination' and is guessing...</h4>
-      )
-      }
+await axios.post(
+          `http://localhost:8000/phase?game_name=${props.game_name}&phase=${1}`
+        );
 */
