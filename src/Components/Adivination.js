@@ -9,8 +9,9 @@ function Adivination(props) {
   const [minister, setMinister] = useState("");
   const [cardList, setCardList] = useState([]);
   const [userEmail] = useState(jwt_decode(getToken()).sub);
+  const [seconds, setSeconds] = useState(20)
   let interval;
-
+  
   useEffect(() => {
     async function getElected() {
       await axios
@@ -34,8 +35,10 @@ function Adivination(props) {
               props.game_name
             }&phase=${1}`
           );
-          triggerPolling();
         }, 20000);
+        setInterval(function () {
+          setSeconds((seconds) => seconds - 1);
+        }, 1000);
       } catch (error) {
         alert(error);
       }
@@ -66,6 +69,7 @@ function Adivination(props) {
 
   return (
     <div>
+      {userEmail === minister && triggerPolling()}
       {userEmail === minister && (
         <div>
           <h4 id="title-form">Adivination!</h4>
@@ -74,21 +78,13 @@ function Adivination(props) {
             {
               if (card.loyalty === "Fenix Order") {
                 return (
-                  <h5
-                    style={{ color: "#f52525" }}
-                    id="title-form"
-                    key={card.loyalty}
-                  >
+                  <h5 style={{ color: "#f52525" }} id="title-form" key={card.loyalty}>
                     {card.loyalty}
                   </h5>
                 );
               } else {
                 return (
-                  <h5
-                    style={{ color: "#061a54" }}
-                    id="title-form"
-                    key={card.loyalty}
-                  >
+                  <h5 style={{ color: "#061a54" }} id="title-form" key={card.loyalty}>
                     {card.loyalty}
                   </h5>
                 );
@@ -103,6 +99,7 @@ function Adivination(props) {
           The minister throw 'Adivination' and is guessing...
         </h4>
       )}
+      <h4 id="title-form">{seconds}</h4>
     </div>
   );
 }
