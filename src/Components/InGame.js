@@ -12,7 +12,7 @@ function InGame(props) {
     game_name: props.game_name,
   });
 
-  const [phaseCount, setPhaseCount] = useState(1);
+  const [phaseCount, setPhaseCount] = useState(props.phase);
   const [profile, setProfile] = useState(false);
   const [spellName, setSpellName] = useState('')
 

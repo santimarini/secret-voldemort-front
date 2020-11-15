@@ -16,7 +16,7 @@ function GameLobby(props) {
        gamename: "",
        max_players: "",
        players: [],
-       creator: jwt_decode(getToken()).sub
+       creator: jwt_decode(getToken()).sub,
    });
   const [jwtHeader] = useState({"Authorization" : `Bearer ${getToken()}`})
   const join_input = {
@@ -27,8 +27,9 @@ function GameLobby(props) {
   const [players, setPlayers] = useState([]);
   const [isCreatorPolling, setIsCreatorPolling] = useState(false);
   const [isPlayerPolling, setIsPlayerPolling] = useState(false);
+  const [returnToGame, setReturnToGame] = useState(false);
+  const [phaseGame, setPhaseGame] = useState(''); 
   const server_uri = `http://localhost:8000/game/${join_input.game_name}`;
-  
   var playerInterval = null; //interval for players
   var creatorInterval = null; //interval for creator
 
@@ -43,20 +44,23 @@ function GameLobby(props) {
               gamename: response.data.game_name,
               max_players: response.data.max_players,
               players: response.data.players,
-              creator: response.data.creator
+              creator: response.data.creator,
           })
+        if (response.data.phase_game !== 0) {
+            setPhaseGame(response.data.phase_game);
+            setReturnToGame(true);
+            setStarted(true);
+        }
+        else{
+            setPhaseGame(0);
+        }
         })
-        .catch((error) => {
-          if (error.response.status === 300) alert(error.response.data.detail);
-          else alert(error);
-          props.history.push("/profile")
+        .catch((error) =>{
+             alert(error)
         });
     }
   joinGame();
   }, [jwtHeader, server_uri, props.history]);
-
-
-
 
   async function askIsStarted() {
       setIsPlayerPolling(true);
@@ -97,7 +101,7 @@ function GameLobby(props) {
     creatorInterval = setInterval(async function(){
         try {
           let response = await axios.get(`http://localhost:8000/get_players?game_name=${join_input.game_name}`)
-        setPlayers(response.data.players_list);
+          setPlayers(response.data.players_list);
         }
         catch (err){
             alert(err)
@@ -108,7 +112,7 @@ function GameLobby(props) {
 
   return (
     <div>
-      {!started &&
+      {(!started && phaseGame === 0) &&
       <Card
         border="dark"
         bg="light"
@@ -142,8 +146,11 @@ function GameLobby(props) {
       </Card.Body>
       </Card>
     }
+
       {userEmail !== gameInfo.creator && (isPlayerPolling || !triggerPolling())}
-      {started && <InGame game_name={gameInfo.gamename}/>}
+      {started && !returnToGame && <InGame phase={1} game_name={join_input.game_name}/>}
+      {returnToGame && <InGame phase={phaseGame} game_name={join_input.game_name}/>}
+
     </div>
   );
 }
