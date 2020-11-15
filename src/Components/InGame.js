@@ -63,7 +63,7 @@ function InGame(props) {
                   id="card-profile"
                 >
               <Card.Body>
-                  <Proclamation setPhase={setPhase} game_name={gameInfo.game_name} />
+                  <Proclamation setSpell={setSpell} setPhase={setPhase} game_name={gameInfo.game_name} />
               </Card.Body>
               </Card>
             </div>

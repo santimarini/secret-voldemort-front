@@ -14,7 +14,7 @@ function PlayerInfo(props) {
           let response = await axios.get(`http://localhost:8000/get_player?game_name=${props.game_name}`, {headers: jwtHeader});
           playerInfo = response.data.player;
           console.log(playerInfo)
-          if(playerInfo.loyalty == "Death Eathers"){
+          if(playerInfo.loyalty == "Death Eaters"){
               setLoyaltyImg("https://res.cloudinary.com/dsmdvuj2y/image/upload/ar_1:1,b_rgb:262c35,bo_5px_solid_rgb:ff0000,c_fill,g_auto,h_639,r_max,w_514/v1605313945/death-eater_nb2g73.jpg");
           }
           else if (playerInfo.loyalty === "Fenix Order") {

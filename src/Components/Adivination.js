@@ -84,7 +84,7 @@ function Adivination(props) {
                 );
               } else {
                 return (
-                  <h5 style={{ color: "#061a54" }} id="title-form" key={card.loyalty}>
+                  <h5 style={{ color: "#1b2dd1" }} id="title-form" key={card.loyalty}>
                     {card.loyalty}
                   </h5>
                 );
