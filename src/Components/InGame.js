@@ -5,6 +5,7 @@ import Voting from './Voting';
 import Proclamation from './Proclamation';
 import Profile from './Auth/Profile';
 import PlayerInfo from './PlayerInfo';
+import Spells from './Spells'
 
 function InGame(props) {
   const [gameInfo] = useState({
@@ -13,10 +14,16 @@ function InGame(props) {
 
   const [phaseCount, setPhaseCount] = useState(1);
   const [profile, setProfile] = useState(false);
+  const [spellName, setSpellName] = useState('')
 
   function setPhase(value) {
     setPhaseCount(value);
   }
+  
+  function setSpell(value) {
+    setSpellName(value)
+  }
+  
     return (
     <div>
         {phaseCount === 1 &&
@@ -45,7 +52,6 @@ function InGame(props) {
                    <Voting setPhase={setPhase} game_name={gameInfo.game_name} />
                </Card.Body>
                </Card>
-
             </div>
         }
         {phaseCount === 3 &&
@@ -74,7 +80,25 @@ function InGame(props) {
               ) : <Profile />}
             </div>
             : <PlayerInfo game_name={gameInfo.game_name}/>}
-    </div>
+        {phaseCount === 5 &&
+           <div>
+             <Card
+                 border="dark"
+                 bg="light"
+                  style={{ width: "50rem" }}
+                 id="card-profile"
+             >
+              <Card.Body>
+                <Spells
+                  spellName={spellName}
+                  setPhase={setPhase}
+                  game_name={gameInfo.game_name}
+                /> 
+              </Card.Body>
+             </Card>
+           </div>
+         }
+</div>
     );
 }
 

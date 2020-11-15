@@ -31,6 +31,10 @@ function Proclamation(props) {
         );
         setGameInfo({ ...gameInfo, cards: dirResponse.data.cards_list });
         setMinDiscarded(true);
+      } else if (response.data.phase_game === 6) {
+        clearInterval(interval)
+        props.setSpell(response.data.spell)
+        props.setPhase(5)
       } else if (response.data.phase_game === 5) {
         clearInterval(interval);
         props.setPhase(4);
@@ -112,23 +116,20 @@ function Proclamation(props) {
           <div style={{ "margin-top": "35px" }}>
             <select id="min_discarded">
               {gameInfo.cards.map((card) => (
-                  <option value={card.id}>
-                  {' '}
-                  {card.loyalty}
-                  {' '}
-                </option>
+                <option value={card.id}> {card.loyalty} </option>
               ))}
             </select>
-          <Button onClick={discardCard} disabled={disabled}
-           style={{ "margin-left": "20px" }}
-           id="btn-form"
-           >
-            {' '}
-            Discard
-            {' '}
-          </Button>
-         </div> 
-       </div>
+            <Button
+              onClick={discardCard}
+              disabled={disabled}
+              style={{ "margin-left": "20px" }}
+              id="btn-form"
+            >
+              {" "}
+              Discard{" "}
+            </Button>
+          </div>
+        </div>
       )}
       {minDiscarded && userEmail === gameInfo.director.user1 && (
         <div>
@@ -137,50 +138,39 @@ function Proclamation(props) {
           <div style={{ "margin-top": "35px" }}>
             <select id="dir_discarded">
               {gameInfo.cards.map((card) => (
-                <option value={card.id}>
-                  {' '}
-                  {card.loyalty}
-                  {' '}
-                </option>
+                <option value={card.id}> {card.loyalty} </option>
               ))}
             </select>
-            <Button onClick={discardCard} disabled={disabled}
-             style={{ "margin-left": "20px" }}
-             id="btn-form"
-             >
-              {' '}
-              Discard
-              {' '}
+            <Button
+              onClick={discardCard}
+              disabled={disabled}
+              style={{ "margin-left": "20px" }}
+              id="btn-form"
+            >
+              {" "}
+              Discard{" "}
             </Button>
           </div>
         </div>
       )}
-      {!minDiscarded
-        && userEmail === gameInfo.director.user1
-        && triggerPolling()}
+      {!minDiscarded &&
+        userEmail === gameInfo.director.user1 &&
+        triggerPolling()}
       {!minDiscarded && userEmail === gameInfo.director.user1 && (
         <h4 id="title-form">
-          The minister
-          {' '}
-          {gameInfo.minister.alias}
-          {' '}
-          is proclaiming.
+          The minister {gameInfo.minister.alias} is proclaiming.
         </h4>
       )}
-      {userEmail !== gameInfo.minister.user1
-        && userEmail !== gameInfo.director.user1 && (
-         <h4 id="title-form">
-            The minister
-            {' '}
-            {gameInfo.minister.alias}
-            {' '}
-            together with the director
-            {' '}
-            {gameInfo.director.alias}
-            {' '}
-            are proclaiming.
+      {userEmail !== gameInfo.minister.user1 &&
+        userEmail !== gameInfo.director.user1 &&
+        triggerPolling()}
+      {userEmail !== gameInfo.minister.user1 &&
+        userEmail !== gameInfo.director.user1 && (
+          <h4 id="title-form">
+            The minister {gameInfo.minister.alias} together with the director{" "}
+            {gameInfo.director.alias} are proclaiming.
           </h4>
-      )}
+        )}
     </div>
   );
 }
