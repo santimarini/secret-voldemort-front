@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-
+import { Card  } from 'react-bootstrap';
 import Nomination from './Nomination';
 import Voting from './Voting';
 import Proclamation from './Proclamation';
 import Profile from './Auth/Profile';
+import PlayerInfo from './PlayerInfo';
 import Spells from './Spells'
 
 function InGame(props) {
@@ -18,63 +19,87 @@ function InGame(props) {
   function setPhase(value) {
     setPhaseCount(value);
   }
-
+  
   function setSpell(value) {
     setSpellName(value)
   }
-
-  switch (phaseCount) {
-    case 1:
-      return (
-        <div className className="nomination">
-          <Nomination
-            setPhase={setPhase}
-            game_name={gameInfo.game_name}
-          />
-        </div>
-      );
-    case 2:
-      return (
-        <div>
-          <Voting setPhase={setPhase} game_name={gameInfo.game_name} />
-        </div>
-      );
-    case 3:
-      return (
-        <div>
-          <Proclamation
-            setSpell={setSpell}
-            setPhase={setPhase}
-            game_name={gameInfo.game_name}
-          />
-        </div>
-      );
-    case 4:
-      return (
-        <div>
-          { !profile ? (
+  
+    return (
+    <div>
+        {phaseCount === 1 &&
             <div>
-              <h3> Game ended. </h3>
-              <div>
-                <button onClick={() => setProfile(true)}> Go to profile </button>
-              </div>
+                <Card
+                  border="dark"
+                  bg="light"
+                  style={{ width: "50rem" }}
+                  id="card-profile"
+                >
+                <Card.Body>
+                    <Nomination setPhase={setPhase} game_name={gameInfo.game_name}/>
+                </Card.Body>
+                </Card>
             </div>
-          ) : <Profile />}
-        </div>
-      );
-    case 5:
-      return (
-        <div>
-          <Spells
-            spellName={spellName}
-            setPhase={setPhase}
-            game_name={gameInfo.game_name}
-          />
-        </div>
-      );
-    default:
-      return <div>Something went wrong.</div>;
-  }
+        }
+        {phaseCount === 2 &&
+            <div>
+               <Card
+                  border="dark"
+                  bg="light"
+                  style={{ width: "50rem" }}
+                  id="card-profile"
+                >
+               <Card.Body>
+                   <Voting setPhase={setPhase} game_name={gameInfo.game_name} />
+               </Card.Body>
+               </Card>
+            </div>
+        }
+        {phaseCount === 3 &&
+            <div>
+              <Card
+                  border="dark"
+                  bg="light"
+                  style={{ width: "50rem" }}
+                  id="card-profile"
+                >
+              <Card.Body>
+                  <Proclamation setPhase={setPhase} game_name={gameInfo.game_name} />
+              </Card.Body>
+              </Card>
+            </div>
+        }
+        {phaseCount === 4 ? 
+            <div>
+              { !profile ? (
+                <div>
+                  <h3> Game ended. </h3>
+                  <div>
+                    <button onClick={() => setProfile(true)}> Go to profile </button>
+                  </div>
+                </div>
+              ) : <Profile />}
+            </div>
+            : <PlayerInfo game_name={gameInfo.game_name}/>}
+        {phaseCount === 5 &&
+           <div>
+             <Card
+                 border="dark"
+                 bg="light"
+                  style={{ width: "50rem" }}
+                 id="card-profile"
+             >
+              <Card.Body>
+                <Spells
+                  spellName={spellName}
+                  setPhase={setPhase}
+                  game_name={gameInfo.game_name}
+                /> 
+              </Card.Body>
+             </Card>
+           </div>
+         }
+</div>
+    );
 }
 
 export default InGame;

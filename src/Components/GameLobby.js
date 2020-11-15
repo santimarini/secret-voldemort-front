@@ -108,6 +108,7 @@ function GameLobby(props) {
 
   return (
     <div>
+      {!started &&
       <Card
         border="dark"
         bg="light"
@@ -115,38 +116,34 @@ function GameLobby(props) {
         id="card-profile"
       >
       <Card.Body>
-      {!started &&
-      <div>
-        <h2 id="title-form" style={{'margin-bottom': '20px'}}> Game Lobby </h2>
-        <h4>Alias: {alias} </h4>
-        <h4>Game Name: {gameInfo.gamename} </h4>
-        <h4>Max players: {gameInfo.max_players} </h4>
-        <ul class="list-group">
-          {players.map((player) => (
-            <li class="list-group-item"> {player.alias} </li>
-          ))}
-        </ul>
-        <h6 id="title-form" style={{ "margin-top": "30px" }}> Waiting for players...</h6>
-
-
-      </div>
-      }
-      {userEmail === gameInfo.creator && (isCreatorPolling || !updateList()) && (
-        <div>
-        {!started && (<div>
-            <Button
-              style={{'margin-top': '20px'}}
-              id="btn-form"
-              onClick={() => startGame()}>
-              Start Game
-            </Button>
-          </div>)}
-        </div>)}
-      {userEmail !== gameInfo.creator && (isPlayerPolling || !triggerPolling())}
-        
-      {started && <InGame game_name={gameInfo.gamename}/>}
+          <div>
+            <h2 id="title-form" style={{'margin-bottom': '20px'}}> Game Lobby </h2>
+            <h4>Alias: {alias} </h4>
+            <h4>Game Name: {gameInfo.gamename} </h4>
+            <h4>Max players: {gameInfo.max_players} </h4>
+            <ul class="list-group">
+              {players.map((player) => (
+                <li class="list-group-item"> {player.alias} </li>
+              ))}
+            </ul>
+            <h6 id="title-form" style={{ "margin-top": "30px" }}> Waiting for players...</h6>
+          </div>
+          {userEmail === gameInfo.creator && (isCreatorPolling || !updateList()) && (
+            <div>
+            {!started && (<div>
+                <Button
+                  style={{'margin-top': '20px'}}
+                  id="btn-form"
+                  onClick={() => startGame()}>
+                  Start Game
+                </Button>
+              </div>)}
+            </div>)}
       </Card.Body>
       </Card>
+    }
+      {userEmail !== gameInfo.creator && (isPlayerPolling || !triggerPolling())}
+      {started && <InGame game_name={gameInfo.gamename}/>}
     </div>
   );
 }
