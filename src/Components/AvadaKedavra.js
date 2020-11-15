@@ -14,6 +14,14 @@ function AvadaKedavra(props) {
     const [result, setResult] = useState({})
     let interval;
 
+    function goToNomination() {
+      props.setPhase(1)
+    }
+
+    function goToEnd() {
+      props.setPhase(4)
+    }
+
     useEffect(() => {
       async function getElected() {
         await axios
@@ -49,14 +57,7 @@ function AvadaKedavra(props) {
         .get(
           `http://localhost:8000/avada_kedavra?game_name=${props.game_name}&victim=${playerTarget}`
         )
-        .then((response) => {
-          setResult(response.data)
-          setKilled(true)
-          triggerPolling()
-        })
-        .catch((error) => {
-          alert(error);
-        });
+      triggerPolling()
     };
 
     const triggerPolling = () => {
@@ -72,14 +73,12 @@ function AvadaKedavra(props) {
         );
         if (response.data.phase_game === 5) {
           clearInterval(interval);
-          setTimeout(() => {
-            props.setPhase(4)
-          }, 10000);
+          setTimeout(goToEnd, 10000);
         } else if(response.data.phase_game === 1) {
           clearInterval(interval)
-          setTimeout(() => {
-            props.setPhase(1)
-          }, 10000);
+          setKilled(true)
+          setResult(response.data.player_murdered)
+          setTimeout(goToNomination, 10000);
         }
       } catch (err) {
         alert(err);
@@ -94,13 +93,11 @@ function AvadaKedavra(props) {
             <h5>Now, choose a player to kill:</h5>
             <div style={{ "margin-top": "35px" }}>
               <select id="candidate">
-              {players.map((player) => {
-                if(player.is_alive && player.user1 !== userEmail){
-                  return (
-                    <option value={player.id}> {player.alias} </option>
-                  )
-                }
-              })}
+                {players.map((player) => {
+                  if (player.is_alive && player.user1 !== userEmail) {
+                    return <option value={player.id}> {player.alias} </option>;
+                  }
+                })}
               </select>
               <Button
                 style={{ "margin-left": "20px", "background-color": "#e33030" }}
@@ -119,9 +116,14 @@ function AvadaKedavra(props) {
             </h4>
           </div>
         )}
-        {killed && 
-        (<h4 id='title-form'>{result.player_murdered.alias} was killed.</h4>)}
-        
+        {killed && (
+          <h4
+            id="title-form"
+            style={{ color: "#e01b25", "margin-top": "20px" }}
+          >
+            {result.alias} was killed.
+          </h4>
+        )}
       </div>
     );
 }
