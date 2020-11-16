@@ -45,7 +45,7 @@ function ChangeAlias() {
         </Card.Header>
         <Accordion.Collapse eventKey="0">
           <Card.Body>
-            <Form id="text-form">
+            <Form id="text-form" onSubmit={changeAlias}>
               <Form.Group >
                 <Form.Label>Your new alias:</Form.Label>
                 <Form.Control
@@ -55,11 +55,11 @@ function ChangeAlias() {
                   placeholder="Enter new alias"
                 />
               </Form.Group>
-              <Button id="btn-form" onClick={changeAlias}>
+              <Button id="btn-form" type="submit">
                 Change
               </Button>
               {successMsg && <h6 style={{"margin-top":"-30px", "color":"#008000"}}> <center> {successMsg} </center></h6>}
-              {errMsg && <h6 style={{"margin-top":"-30px", "color":"#FF0000"}}> <center> {errMsg} </center></h6>}
+              {errMsg && !successMsg && <h6 style={{"margin-top":"-30px", "color":"#FF0000"}}> <center> {errMsg} </center></h6>}
             </Form>
           </Card.Body>
         </Accordion.Collapse>
