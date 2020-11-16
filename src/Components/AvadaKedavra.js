@@ -53,11 +53,14 @@ function AvadaKedavra(props) {
 
     const killPlayer = async () => {
       const playerTarget = document.getElementById("candidate").value;
-      await axios
-        .get(
+      try {
+        await axios.get(
           `http://localhost:8000/avada_kedavra?game_name=${props.game_name}&victim=${playerTarget}`
-        )
-      triggerPolling()
+        );
+        triggerPolling();
+      } catch (err) {
+        alert(err);
+      }
     };
 
     const triggerPolling = () => {
