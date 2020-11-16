@@ -6,18 +6,17 @@ import { getToken } from '../Util/HelperFunctions';
 function PlayerInfo(props) {
   const [loyaltyImg, setLoyaltyImg] = useState('');
   const [jwtHeader] = useState({ Authorization: `Bearer ${getToken()}` });
-  var [playerInfo] = useState({});
+  const [playerInfo, setPlayerInfo] = useState({});
 
   useEffect(() => {
     async function getPlayerInfo() {
       try {
           let response = await axios.get(`http://localhost:8000/get_player?game_name=${props.game_name}`, {headers: jwtHeader});
-          playerInfo = response.data.player;
-          console.log(playerInfo)
-          if(playerInfo.loyalty == "Death Eaters"){
+          setPlayerInfo(response.data.player);
+          if(response.data.player.loyalty == "Death Eaters"){
               setLoyaltyImg("https://res.cloudinary.com/dsmdvuj2y/image/upload/ar_1:1,b_rgb:262c35,bo_5px_solid_rgb:ff0000,c_fill,g_auto,h_639,r_max,w_514/v1605313945/death-eater_nb2g73.jpg");
           }
-          else if (playerInfo.loyalty === "Fenix Order") {
+          else if (response.data.player.loyalty === "Fenix Order") {
               setLoyaltyImg("https://res.cloudinary.com/dsmdvuj2y/image/upload/ar_1:1,b_rgb:262c35,bo_5px_solid_rgb:ff0000,c_fill,g_auto,h_639,r_max,w_514/v1605313952/phoenix-order.jpg");
           }
       }

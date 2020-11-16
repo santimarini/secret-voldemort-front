@@ -119,14 +119,7 @@ function AvadaKedavra(props) {
             </h4>
           </div>
         )}
-        {killed && (
-          <h4
-            id="title-form"
-            style={{ color: "#e01b25", "margin-top": "20px" }}
-          >
-            {result.alias} was killed.
-          </h4>
-        )}
+        
       </div>
     );
 }
