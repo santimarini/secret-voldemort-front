@@ -48,7 +48,7 @@ function Profile() {
             <h3 id="title-form">Profile Information</h3>
           </Card.Title>
           <Card.Text>
-            <h5>Username: {alias}</h5>
+            <h5>Alias: {alias}</h5>
           </Card.Text>
           {userImage &&
             <Image 

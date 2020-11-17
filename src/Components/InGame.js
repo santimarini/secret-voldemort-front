@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card  } from 'react-bootstrap';
+import { Button, Card  } from 'react-bootstrap';
 import Nomination from './Nomination';
 import Voting from './Voting';
 import Proclamation from './Proclamation';
@@ -72,10 +72,20 @@ function InGame(props) {
             <div>
               { !profile ? (
                 <div>
+                 <Card
+                     border="dark"
+                     bg="light"
+                      style={{ width: "50rem" }}
+                     id="card-profile"
+                 >
+                  <Card.Body>
+
                   <h3> Game ended. </h3>
                   <div>
-                    <button onClick={() => setProfile(true)}> Go to profile </button>
+                      <Button id="btn-form" style={{"margin-top":"25px"}} onClick={() => setProfile(true)}> Go to profile </Button>
                   </div>
+                </Card.Body>
+                 </Card>
                 </div>
               ) : <Profile />}
             </div>

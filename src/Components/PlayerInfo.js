@@ -38,7 +38,7 @@ function PlayerInfo(props) {
           <Card.Title >Loyalty: { playerInfo.loyalty }</Card.Title>
         </Card.Body>
       </Card>
-    )};
+    )}
     </div>
   );
 }
