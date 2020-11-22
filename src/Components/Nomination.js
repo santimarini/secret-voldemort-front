@@ -9,12 +9,14 @@ function Nomination(props) {
   const [gameInfo, setGameInfo] = useState({
     game_name: '',
     minister: {},
-    players: [],
+    players: []
   });
   const [nominationInfo] = useState({
     director: '',
   });
   const [userEmail] = useState(jwt_decode(getToken()).sub);
+  const [isPolling, setIsPolling] = useState(false)
+  let interval = null;
 
   const nominateDirector = async () => {
     nominationInfo.director = document.getElementById('candidate').value;
@@ -22,6 +24,7 @@ function Nomination(props) {
       await axios.put(
         `http://localhost:8000/game?game_name=${gameInfo.game_name}&dir=${nominationInfo.director}`,
       );
+      clearInterval(interval)
       props.setPhase(2);
     } catch (err) {
       alert(err);
@@ -47,15 +50,14 @@ function Nomination(props) {
     onElection();
   }, []);
 
-  let interval = null;
-
   async function askIsNominated() {
     try {
       const response = await axios.get(
         `http://localhost:8000/phase?game_name=${props.game_name}`,
+        console.log("polling nomination")
       );
       if (response.data.phase_game === 2) {
-        clearInterval(interval);
+        clearInterval(interval)
         props.setPhase(2);
       }
     } catch (err) {
@@ -64,6 +66,7 @@ function Nomination(props) {
   }
 
   const triggerPolling = () => {
+    setIsPolling(true)
     interval = setInterval(() => {
       askIsNominated();
     }, 2500);
@@ -71,28 +74,33 @@ function Nomination(props) {
 
   return (
     <div>
-      {userEmail === gameInfo.minister.user1 ? (
-        <div className className="container">
-          <h4 id="title-form">You have been nominated as Minister of Magic.</h4>
-          <h5>Please select a player to nominate as Director.</h5>
-          <div style={{ "margin-top": "35px" }}>
-            <select id="candidate">
-              {gameInfo.players.map((player) => (
-                <option value={player.id}> {player.alias} </option>
-              ))}
-            </select>
-            <Button
-              style={{ "margin-left": "20px" }}
-              id="btn-form"
-              onClick={nominateDirector}
-            >
-              Nominate
-            </Button>
+      {Object.keys(gameInfo.minister).length !== 0 &&
+        userEmail === gameInfo.minister.user1 && (
+          <div className className="container">
+            <h4 id="title-form">
+              You have been nominated as Minister of Magic.
+            </h4>
+            <h5>Please select a player to nominate as Director.</h5>
+            <div style={{ "margin-top": "35px" }}>
+              <select id="candidate">
+                {gameInfo.players.map((player) => (
+                  <option value={player.id}> {player.alias} </option>
+                ))}
+              </select>
+              <Button
+                style={{ "margin-left": "20px" }}
+                id="btn-form"
+                onClick={nominateDirector}
+              >
+                Nominate
+              </Button>
+            </div>
           </div>
-        </div>
-      ) : (
-        triggerPolling()
-      )}
+        )}
+      {Object.keys(gameInfo.minister).length !== 0 &&
+        userEmail !== gameInfo.minister.user1 &&
+        !isPolling &&
+        triggerPolling()}
       {userEmail !== gameInfo.minister.user1 && (
         <h4 id="title-form">
           The nominated minister {gameInfo.minister.alias} is choosing

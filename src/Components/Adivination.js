@@ -9,9 +9,10 @@ function Adivination(props) {
   const [minister, setMinister] = useState("");
   const [cardList, setCardList] = useState([]);
   const [userEmail] = useState(jwt_decode(getToken()).sub);
-  const [seconds, setSeconds] = useState(20)
+  const [seconds, setSeconds] = useState(20);
+  const [isPolling, setIsPolling] = useState(false);
   let interval;
-  
+
   useEffect(() => {
     async function getElected() {
       await axios
@@ -62,6 +63,7 @@ function Adivination(props) {
   }
 
   const triggerPolling = () => {
+    setIsPolling(true);
     interval = setInterval(() => {
       askSpellEnd();
     }, 2500);
@@ -69,7 +71,7 @@ function Adivination(props) {
 
   return (
     <div>
-      {userEmail === minister && triggerPolling()}
+      {!isPolling && userEmail === minister && triggerPolling()}
       {userEmail === minister && (
         <div>
           <h4 id="title-form">Adivination!</h4>
@@ -78,13 +80,21 @@ function Adivination(props) {
             {
               if (card.loyalty === "Fenix Order") {
                 return (
-                  <h5 style={{ color: "#f52525" }} id="title-form" key={card.loyalty}>
+                  <h5
+                    style={{ color: "#f52525" }}
+                    id="title-form"
+                    key={card.loyalty}
+                  >
                     {card.loyalty}
                   </h5>
                 );
               } else {
                 return (
-                  <h5 style={{ color: "#1b2dd1" }} id="title-form" key={card.loyalty}>
+                  <h5
+                    style={{ color: "#1b2dd1" }}
+                    id="title-form"
+                    key={card.loyalty}
+                  >
                     {card.loyalty}
                   </h5>
                 );
@@ -93,7 +103,10 @@ function Adivination(props) {
           })}
         </div>
       )}
-      {userEmail !== minister && triggerPolling()}
+      {minister !== "" &&
+        !isPolling &&
+        userEmail !== minister &&
+        triggerPolling()}
       {userEmail !== minister && (
         <h4 id="title-form">
           The minister throw 'Adivination' and is guessing...

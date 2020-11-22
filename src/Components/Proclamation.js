@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import jwtDecode from 'jwt-decode';
-import { Button } from 'react-bootstrap'
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import jwtDecode from "jwt-decode";
+import { Button } from "react-bootstrap";
 
-import { getToken } from '../Util/HelperFunctions';
+import { getToken } from "../Util/HelperFunctions";
 
 function Proclamation(props) {
   const [gameInfo, setGameInfo] = useState({
     game_name: props.game_name,
     cards: [],
     disc_card: 0,
-    minister: '',
-    director: '',
+    minister: "",
+    director: "",
   });
   const [minDiscarded, setMinDiscarded] = useState(false);
   const [disabled, setDisabled] = useState(false);
@@ -22,23 +22,27 @@ function Proclamation(props) {
   async function askIsProclaimed() {
     try {
       const response = await axios.get(
-        `http://localhost:8000/phase?game_name=${gameInfo.game_name}`,
+        `http://localhost:8000/phase?game_name=${gameInfo.game_name}`
       );
       if (response.data.phase_game === 4) {
         // director proclaim
-        const dirResponse = await axios.get(
-          `http://localhost:8000/cards/draw_two_cards?game_name=${gameInfo.game_name}`,
-        );
-        setGameInfo({ ...gameInfo, cards: dirResponse.data.cards_list });
-        setMinDiscarded(true);
+        if (userEmail === gameInfo.director.user1) {
+          clearInterval(interval);
+          const dirResponse = await axios.get(
+            `http://localhost:8000/cards/draw_two_cards?game_name=${gameInfo.game_name}`
+          );
+          setGameInfo({ ...gameInfo, cards: dirResponse.data.cards_list });
+          setMinDiscarded(true);
+        }
       } else if (response.data.phase_game === 6) {
-        clearInterval(interval)
-        props.setSpell(response.data.spell)
-        props.setPhase(5)
+        clearInterval(interval);
+        props.setSpell(response.data.spell);
+        props.setPhase(5);
       } else if (response.data.phase_game === 5) {
         clearInterval(interval);
         props.setPhase(4);
       } else if (response.data.phase_game === 1) {
+        clearInterval(interval);
         props.setPhase(1);
       }
     } catch (err) {
@@ -55,24 +59,27 @@ function Proclamation(props) {
   const discardCard = async () => {
     try {
       if (userEmail === gameInfo.minister.user1) {
-        gameInfo.disc_card = document.getElementById('min_discarded').value;
+        clearInterval(interval);
+        gameInfo.disc_card = document.getElementById("min_discarded").value;
         await axios.put(
-          `http://localhost:8000/cards/discard_min?card_id=${gameInfo.disc_card}&game_name=${gameInfo.game_name}`,
+          `http://localhost:8000/cards/discard_min?card_id=${gameInfo.disc_card}&game_name=${gameInfo.game_name}`
         );
         setDisabled(true);
         triggerPolling();
       } else if (userEmail === gameInfo.director.user1) {
-        gameInfo.disc_card = document.getElementById('dir_discarded').value;
+        clearInterval(interval);
+        gameInfo.disc_card = document.getElementById("dir_discarded").value;
         const remainingCard = gameInfo.cards.filter(
-          (card) => card.id !== gameInfo.disc_card,
+          (card) => card.id !== gameInfo.disc_card
         );
         await axios.put(
-          `http://localhost:8000/cards/discard_dir?card_id=${gameInfo.disc_card}&game_name=${gameInfo.game_name}`,
+          `http://localhost:8000/cards/discard_dir?card_id=${gameInfo.disc_card}&game_name=${gameInfo.game_name}`
         );
         setDisabled(true);
         await axios.put(
-          `http://localhost:8000/cards/proclaim?card_id=${remainingCard[0].id}&game_name=${gameInfo.game_name}`,
+          `http://localhost:8000/cards/proclaim?card_id=${remainingCard[0].id}&game_name=${gameInfo.game_name}`
         );
+        triggerPolling();
       }
     } catch (err) {
       alert(err);
@@ -85,18 +92,18 @@ function Proclamation(props) {
       try {
         gameInfo.game_name = props.game_name;
         const choosedResponse = await axios.get(
-          `http://localhost:8000/dirmin_elect?game_name=${gameInfo.game_name}`,
+          `http://localhost:8000/dirmin_elect?game_name=${gameInfo.game_name}`
         );
         gameInfo.minister = choosedResponse.data.elect_min;
         gameInfo.director = choosedResponse.data.elect_dir;
         if (userEmail === gameInfo.minister.user1) {
           const minResponse = await axios.get(
-            `http://localhost:8000/cards/draw_three_cards?game_name=${gameInfo.game_name}`,
+            `http://localhost:8000/cards/draw_three_cards?game_name=${gameInfo.game_name}`
           );
           setGameInfo({ ...gameInfo, cards: minResponse.data.cards_list });
         } else if (userEmail === gameInfo.director.user1) {
           const dirResponse = await axios.get(
-            `http://localhost:8000/cards/draw_two_cards?game_name=${gameInfo.game_name}`,
+            `http://localhost:8000/cards/draw_two_cards?game_name=${gameInfo.game_name}`
           );
           setGameInfo({ ...gameInfo, cards: dirResponse.data.cards_list });
         }

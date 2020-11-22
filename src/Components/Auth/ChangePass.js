@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Card, Accordion, Button, Form } from "react-bootstrap";
-import axios from 'axios'
+import axios from "axios";
 
-import { getToken } from '../../Util/HelperFunctions';
+import { getToken } from "../../Util/HelperFunctions";
 
 function ChangePass() {
   const [passInfo, setPassInfo] = useState({
@@ -10,27 +10,28 @@ function ChangePass() {
     new_pass: "",
     confirm_new_pass: "",
   });
-  const [jwtHeader] = useState({"Authorization" : `Bearer ${getToken()}`})
-  const [error, setError] = useState('')
-  const [success, setSuccess] = useState('')
+  const [jwtHeader] = useState({ Authorization: `Bearer ${getToken()}` });
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
-  const server_uri = `http://localhost:8000/change_password?old_password=${passInfo.actual_pass}&`
-                      + `new_password=${passInfo.new_pass}&confirm_new_password=${passInfo.confirm_new_pass}`;
+  const server_uri =
+    `http://localhost:8000/change_password?old_password=${passInfo.actual_pass}&` +
+    `new_password=${passInfo.new_pass}&confirm_new_password=${passInfo.confirm_new_pass}`;
 
   const handleChange = (e) => {
     setPassInfo({ ...passInfo, [e.target.name]: e.target.value });
   };
 
   const changePassword = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     await axios
       .post(server_uri, {}, { headers: jwtHeader })
       .then((response) => {
-        setError('')
-        setSuccess(response.data)
+        setError("");
+        setSuccess(response.data);
       })
       .catch((error) => {
-        setSuccess('')
+        setSuccess("");
         setError(error.response.data.detail);
       });
   };
@@ -78,9 +79,17 @@ function ChangePass() {
                 Change
               </Button>
 
-              {success && <h6 style={{"margin-top":"-30px", "color":"#008000"}}> <center> {success} </center> </h6>}
-              {error && <h6 style={{"margin-top":"-30px", "color":"#FF0000"}}><center> {error} </center> </h6>}
-
+              {success && (
+                <h6 style={{ "margin-top": "-30px", color: "#008000" }}>
+                  {" "}
+                  <center> {success} </center>{" "}
+                </h6>
+              )}
+              {error && (
+                <h6 style={{ "margin-top": "-30px", color: "#FF0000" }}>
+                  <center> {error} </center>{" "}
+                </h6>
+              )}
             </Form>
           </Card.Body>
         </Accordion.Collapse>
