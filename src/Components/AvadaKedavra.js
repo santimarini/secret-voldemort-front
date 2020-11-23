@@ -121,6 +121,11 @@ function AvadaKedavra(props) {
           </h4>
         </div>
       )}
+      {killed && (
+        <h4 style={{ "margin-top": "15px", color: "#e33030" }}>
+          {result.alias} was killed.
+        </h4>
+      )}
     </div>
   );
 }

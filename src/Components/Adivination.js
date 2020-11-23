@@ -38,7 +38,11 @@ function Adivination(props) {
           );
         }, 20000);
         setInterval(function () {
-          setSeconds((seconds) => seconds - 1);
+          if(seconds <= 0) {
+            setSeconds(0)
+          } else {
+            setSeconds((seconds) => seconds - 1);
+          }
         }, 1000);
       } catch (error) {
         alert(error);
