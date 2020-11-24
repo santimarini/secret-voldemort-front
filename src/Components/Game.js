@@ -42,16 +42,10 @@ function Game(props) {
     }
     try {
       const response = await axios.post(ENDPOINT_G, gameInfo, { headers: jwtHeader });
-      alert(
-        `Game created! Its name is ${
-          response.data.name
-        }. Invite your friends to join!`,
-      );
       // redirect to join game created
       props.history.push(`/game/${response.data.name}`);
     } catch (error) {
-      if (error.response.status === 401) setError(error.response.data.detail);
-      else setError(error);
+      setError(error.response.data.detail);
     }
   };
 

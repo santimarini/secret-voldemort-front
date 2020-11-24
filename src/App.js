@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Route } from 'react-router-dom';
 
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -14,6 +14,7 @@ import Game from './Components/Game';
 import GameLobby from './Components/GameLobby';
 import Navbar from './Components/Navbar';
 import GameList from './Components/GameList'
+import EmailConfirmed from './Components/Auth/EmailConfirmed'
 
 class App extends Component {
   render() {
@@ -31,6 +32,7 @@ class App extends Component {
           <NoLogged path="/play" component={Game} />
           <NoLogged path="/game/:gamename" component={GameLobby} />
           <NoLogged path="/games" component={GameList} />
+          <Route path="/validate/:token" component={EmailConfirmed} />
         </div>
       </BrowserRouter>
     );

@@ -4,7 +4,11 @@ import axios from 'axios';
 import {Button} from 'react-bootstrap'
 import VotingResult from './VotingResult'
 
+import jwt_decode from "jwt-decode";
+import { getToken } from "../Util/HelperFunctions";
+
 function Voting(props) {
+  const [userEmail] = useState(jwt_decode(getToken()).sub);
   const [postulated, setPostulated] = useState({
     director: '',
     minister: '',
@@ -27,6 +31,15 @@ function Voting(props) {
   }
 
   useEffect(() => {
+    axios
+      .get(`http://localhost:8000/player_murdered?game_name=${game_name}`)
+      .then((response) => {
+        let killed = response.data.player_murdered
+        killed && userEmail === killed.user1 && setDisabled(true) && triggerPolling()
+      })
+      .catch((error) => {
+        alert(error);
+      });
     axios
       .get(GET_POSTULATED)
       .then((response) => {
@@ -69,10 +82,14 @@ function Voting(props) {
       .catch((error) => {
         alert(error);
       });
+    triggerPolling()
+  };
+
+  const triggerPolling = () => {
     interval = setInterval(() => {
       askForPhaseChange();
     }, 2500);
-  };
+  }
 
   return (
     <div>

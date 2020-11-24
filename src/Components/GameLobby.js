@@ -54,7 +54,7 @@ function GameLobby(props) {
           }
         })
         .catch((error) => {
-          alert(error);
+          props.history.push("/profile")
         });
     }
     joinGame();
