@@ -35,7 +35,10 @@ function Voting(props) {
       .get(`http://localhost:8000/player_murdered?game_name=${game_name}`)
       .then((response) => {
         let killed = response.data.player_murdered
-        killed && userEmail === killed.user1 && setDisabled(true) && triggerPolling()
+        if(killed && userEmail === killed.user1){
+          setDisabled(true)
+          triggerPolling()
+        }
       })
       .catch((error) => {
         alert(error);

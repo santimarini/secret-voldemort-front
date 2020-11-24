@@ -11,6 +11,7 @@ function AvadaKedavra(props) {
   const [userEmail] = useState(jwt_decode(getToken()).sub);
   const [players, setPlayers] = useState([]);
   const [killed, setKilled] = useState(false);
+  const [win, setWin] = useState(false)
   const [result, setResult] = useState({});
   const [isPolling, setIsPolling] = useState(false);
 
@@ -75,6 +76,8 @@ function AvadaKedavra(props) {
       );
       if (response.data.phase_game === 5) {
         clearInterval(interval);
+        setWin(true)
+        setResult(response.data.player_murdered)
         setTimeout(goToEnd, 10000);
       } else if (response.data.phase_game === 1) {
         clearInterval(interval);
@@ -125,6 +128,14 @@ function AvadaKedavra(props) {
         <h4 style={{ "margin-top": "15px", color: "#e33030" }}>
           {result.alias} was killed.
         </h4>
+      )}
+      {win && (
+        <div>
+          <h4 style={{ "margin-top": "15px", color: "#e33030" }}>
+            {result.alias} was Voldemort and is dead.
+          </h4>
+          <h4 id='title-form'>The Fenix Order won the game!</h4>
+        </div>
       )}
     </div>
   );
