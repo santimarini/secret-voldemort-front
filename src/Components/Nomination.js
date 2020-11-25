@@ -8,9 +8,9 @@ import { getToken } from '../Util/HelperFunctions';
 function Nomination(props) {
   const [gameInfo, setGameInfo] = useState({
     game_name: '',
-    minister: {},
     players: []
   });
+  const [minister, setMinister] = useState({})
   const [nominationInfo] = useState({
     director: '',
   });
@@ -36,17 +36,26 @@ function Nomination(props) {
       gameInfo.game_name = props.game_name;
       try {
         const response = await axios.post(
+          `http://localhost:8000/set_minister?game_name=${gameInfo.game_name}`,
+        );
+        setMinister(response.data.minister);
+      } catch (error) {
+        alert(error);
+      }
+
+      try {
+        const response = await axios.post(
           `http://localhost:8000/next_turn?game_name=${gameInfo.game_name}`,
         );
         setGameInfo({
           ...gameInfo,
-          minister: response.data.minister,
           players: response.data.players,
         });
       } catch (error) {
         alert(error);
       }
     }
+
     onElection();
   }, []);
 
@@ -54,7 +63,6 @@ function Nomination(props) {
     try {
       const response = await axios.get(
         `http://localhost:8000/phase?game_name=${props.game_name}`,
-        console.log("polling nomination")
       );
       if (response.data.phase_game === 2) {
         clearInterval(interval)
@@ -74,8 +82,8 @@ function Nomination(props) {
 
   return (
     <div>
-      {Object.keys(gameInfo.minister).length !== 0 &&
-        userEmail === gameInfo.minister.user1 && (
+      {Object.keys(minister).length !== 0 &&
+        userEmail === minister.user1 && (
           <div className className="container">
             <h4 id="title-form">
               You have been nominated as Minister of Magic.
@@ -97,13 +105,13 @@ function Nomination(props) {
             </div>
           </div>
         )}
-      {Object.keys(gameInfo.minister).length !== 0 &&
-        userEmail !== gameInfo.minister.user1 &&
+      {Object.keys(minister).length !== 0 &&
+        userEmail !== minister.user1 &&
         !isPolling &&
         triggerPolling()}
-      {userEmail !== gameInfo.minister.user1 && (
+      {userEmail !== minister.user1 && (
         <h4 id="title-form">
-          The nominated minister {gameInfo.minister.alias} is choosing
+          The nominated minister {minister.alias} is choosing
           director...
         </h4>
       )}

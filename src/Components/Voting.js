@@ -17,6 +17,7 @@ function Voting(props) {
   const [voteInfo, setVoteInfo] = useState({});
   const [endVote, setEndVote] = useState(false)
   const [win, setWin] = useState(false)
+  const [jwtHeader] = useState({ Authorization: `Bearer ${getToken()}` });
   let interval;
 
   const { game_name } = props;
@@ -78,7 +79,11 @@ function Voting(props) {
   const sendVote = async (vote) => {
     setDisabled(true);
     await axios
-      .put(`http://localhost:8000/game/${game_name}/vote?vote=${vote}`)
+      .put(
+        `http://localhost:8000/game/${game_name}/vote?vote=${vote}`,
+        {},
+        { headers: jwtHeader }
+      )
       .then((response) => {
         setVoteInfo(response.data);
       })

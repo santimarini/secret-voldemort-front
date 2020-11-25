@@ -14,6 +14,7 @@ function AvadaKedavra(props) {
   const [win, setWin] = useState(false)
   const [result, setResult] = useState({});
   const [isPolling, setIsPolling] = useState(false);
+  const [disabled, setDisabled] = useState(false)
 
   let interval;
 
@@ -56,6 +57,7 @@ function AvadaKedavra(props) {
       await axios.get(
         `http://localhost:8000/avada_kedavra?game_name=${props.game_name}&victim=${playerTarget}`
       );
+      setDisabled(true)
       triggerPolling();
     } catch (err) {
       alert(err);
@@ -105,6 +107,7 @@ function AvadaKedavra(props) {
               })}
             </select>
             <Button
+              disabled={disabled}
               style={{ "margin-left": "20px", "background-color": "#e33030" }}
               onClick={killPlayer}
             >

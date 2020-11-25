@@ -75,7 +75,7 @@ function Board(props) {
             </Col>
             <Col xs={12}>
               <h5 id="title-form">
-                Remaining cards in deck: {info.num_proclamations_availables}
+                Remaining cards in deck: {info.num_proclamations_avilables}
               </h5>
             </Col>
             <Col xs={12}>
