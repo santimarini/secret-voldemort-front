@@ -70,7 +70,7 @@ function Proclamation(props) {
         clearInterval(interval);
         gameInfo.disc_card = document.getElementById("dir_discarded").value;
         const remainingCard = gameInfo.cards.filter(
-          (card) => card.id !== gameInfo.disc_card
+          (card) => card.id != gameInfo.disc_card
         );
         await axios.put(
           `http://localhost:8000/cards/discard_dir?card_id=${gameInfo.disc_card}&game_name=${gameInfo.game_name}`
