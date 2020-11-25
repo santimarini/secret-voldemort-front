@@ -88,6 +88,18 @@ function GameLobby(props) {
       alert(err);
     }
   }
+  async function exitGame() {
+    try {
+      let response = await axios.get(
+        `http://localhost:8000/exit_game?game_name=${join_input.game_name}`,
+          { headers: jwtHeader }
+      );
+      window.location.href = '/games'
+    } catch (err) {
+      alert(err);
+    }
+  }
+
 
   const triggerPolling = () => {
     playerInterval = setInterval(function () {
@@ -148,6 +160,13 @@ function GameLobby(props) {
                         onClick={() => startGame()}
                       >
                         Start Game
+                      </Button>
+                      <Button
+                        style={{ "margin-top": "20px",
+                            "margin-left": "10px", "background-color": "#8B0000"}}
+                        onClick={() => exitGame()}
+                      >
+                        Exit Game
                       </Button>
                     </div>
                   )}
