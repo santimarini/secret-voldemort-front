@@ -33,10 +33,9 @@ function Voting(props) {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8000/player_murdered?game_name=${game_name}`)
+      .get(`http://localhost:8000/get_player?game_name=${game_name}`, {headers: jwtHeader})
       .then((response) => {
-        let killed = response.data.player_murdered
-        if(killed && userEmail === killed.user1){
+        if(!response.data.player.is_alive){
           setDisabled(true)
           triggerPolling()
         }
