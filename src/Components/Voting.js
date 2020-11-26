@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import '../App.css';
 import axios from 'axios';
-import {Button} from 'react-bootstrap'
-import VotingResult from './VotingResult'
+import {Button} from 'react-bootstrap';
+import VotingResult from './VotingResult';
+import VotingStatus from './VotingStatus';
 
 import jwt_decode from "jwt-decode";
 import { getToken } from "../Util/HelperFunctions";
@@ -63,8 +64,10 @@ function Voting(props) {
       );
       if (response.data.phase_game === 3) {
         clearInterval(interval);
+        setTimeout(() => {
         setEndVote(true)
         setWin(true)
+       }, 5000);
       } else if (response.data.phase_game === 1) {
         clearInterval(interval);
         goToNomination()
@@ -134,6 +137,7 @@ function Voting(props) {
           />
         ) : <h4>The players are voting...</h4>}
       </div>
+      <VotingStatus game_name={game_name}/>
     </div>
   );
 }
