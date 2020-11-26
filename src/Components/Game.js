@@ -74,7 +74,7 @@ function Game(props) {
                 id="max_players"
                 name="max_players"
                 min="5"
-                max="5"
+                max="10"
                 onChange={updateGameInfo}
                 required
                 placeholder="Enter max. players"
