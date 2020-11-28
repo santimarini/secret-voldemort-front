@@ -29,6 +29,7 @@ function GameLobby(props) {
   const [isPlayerPolling, setIsPlayerPolling] = useState(false);
   const [returnToGame, setReturnToGame] = useState(false);
   const [phaseGame, setPhaseGame] = useState("");
+  const [msjError, setMsjError] = useState("");
   const server_uri = `http://localhost:8000/game/${join_input.game_name}`;
   var playerInterval = null; //interval for players
   var creatorInterval = null; //interval for creator
@@ -54,7 +55,7 @@ function GameLobby(props) {
           }
         })
         .catch((error) => {
-          props.history.push("/profile")
+          props.history.push("/profile");
         });
     }
     joinGame();
@@ -85,21 +86,20 @@ function GameLobby(props) {
       clearInterval(creatorInterval);
     } catch (err) {
       clearInterval(creatorInterval);
-      alert(err);
+      setMsjError(err.response.data.detail);
     }
   }
   async function exitGame() {
     try {
       let response = await axios.get(
         `http://localhost:8000/exit_game?game_name=${join_input.game_name}`,
-          { headers: jwtHeader }
+        { headers: jwtHeader }
       );
-      window.location.href = '/games'
+      window.location.href = "/games";
     } catch (err) {
       alert(err);
     }
   }
-
 
   const triggerPolling = () => {
     playerInterval = setInterval(function () {
@@ -123,9 +123,7 @@ function GameLobby(props) {
 
   return (
     <div>
-      
       {!started && phaseGame === 0 && (
-
         <Card
           border="dark"
           bg="light"
@@ -154,7 +152,7 @@ function GameLobby(props) {
               (isCreatorPolling || !updateList()) ? (
                 <div>
                   {!started && (
-                      <div>
+                    <div>
                       <Button
                         style={{ "margin-top": "20px" }}
                         id="btn-form"
@@ -163,25 +161,36 @@ function GameLobby(props) {
                         Start Game
                       </Button>
                       <Button
-                        style={{ "margin-top": "20px",
-                            "margin-left": "10px", "background-color": "#8B0000"}}
+                        style={{
+                          "margin-top": "20px",
+                          "margin-left": "10px",
+                          "background-color": "#8B0000",
+                        }}
                         onClick={() => exitGame()}
                       >
                         Exit Game
                       </Button>
-                        </div>
+                      {msjError && (
+                        <h5 id="title-form" style={{ "margin-top": "15px" }}>
+                          {msjError}
+                        </h5>
+                      )}
+                    </div>
                   )}
                 </div>
-              ): (
-            <div>
-              <Button
-                style={{ "margin-top": "20px",
-                    "margin-left": "10px", "background-color": "#8B0000"}}
-                onClick={() => exitGame()}
-              >
-                Exit Game
-              </Button>
-            </div>
+              ) : (
+                <div>
+                  <Button
+                    style={{
+                      "margin-top": "20px",
+                      "margin-left": "10px",
+                      "background-color": "#8B0000",
+                    }}
+                    onClick={() => exitGame()}
+                  >
+                    Exit Game
+                  </Button>
+                </div>
               )}
             </div>
           </Card.Body>
