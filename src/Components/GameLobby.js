@@ -123,7 +123,9 @@ function GameLobby(props) {
 
   return (
     <div>
+      
       {!started && phaseGame === 0 && (
+
         <Card
           border="dark"
           bg="light"
@@ -148,12 +150,11 @@ function GameLobby(props) {
                 {" "}
                 Waiting for players...
               </h6>
-            </div>
-            {userEmail === gameInfo.creator &&
-              (isCreatorPolling || !updateList()) && (
+              {userEmail === gameInfo.creator &&
+              (isCreatorPolling || !updateList()) ? (
                 <div>
                   {!started && (
-                    <div>
+                      <div>
                       <Button
                         style={{ "margin-top": "20px" }}
                         id="btn-form"
@@ -168,10 +169,21 @@ function GameLobby(props) {
                       >
                         Exit Game
                       </Button>
-                    </div>
+                        </div>
                   )}
                 </div>
+              ): (
+            <div>
+              <Button
+                style={{ "margin-top": "20px",
+                    "margin-left": "10px", "background-color": "#8B0000"}}
+                onClick={() => exitGame()}
+              >
+                Exit Game
+              </Button>
+            </div>
               )}
+            </div>
           </Card.Body>
         </Card>
       )}
