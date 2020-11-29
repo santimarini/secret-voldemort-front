@@ -67,9 +67,13 @@ function GameLobby(props) {
       let response = await axios.get(
         `http://localhost:8000/phase?game_name=${join_input.game_name}`
       );
-      if (response.data.phase_game !== 0) {
+      if (response.data.phase_game !== 0 && 
+        response.data.phase_game !== 5) {
         setStarted(true);
         clearInterval(playerInterval);
+      }
+      if(response.data.phase_game === 5){
+        window.location.href = '/games';
       }
       setPlayers(response.data.players_list);
     } catch (err) {
