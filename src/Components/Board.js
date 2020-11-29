@@ -5,7 +5,8 @@ import axios from "axios";
 
 function Board(props) {
   const [players, setPlayers] = useState([]);
-  const [info, setInfo] = useState({})
+  const [info, setInfo] = useState({});
+  const [thereIsChaos, setThereIsChaos] = useState(false);
   let intervalPlayers;
   let intervalInfo;
 
@@ -23,8 +24,13 @@ function Board(props) {
   async function getInfo() {
     await axios
       .get(`http://localhost:8000/game_state?game_name=${props.game_name}`)
-      .then((response) => {
+      .then(async (response) => {
         setInfo(response.data);
+        setThereIsChaos(response.data.election_marker === 3)
+        if (thereIsChaos){
+            setTimeout(() => {
+            }, 3000);
+        }
       })
       .catch((error) => {
         alert(error);
@@ -33,7 +39,7 @@ function Board(props) {
 
   useEffect(() => {
     triggerPollingPlayers();
-    triggerPollingInfo()
+    triggerPollingInfo();
   }, []);
 
   const triggerPollingPlayers = () => {
@@ -70,8 +76,13 @@ function Board(props) {
             </Col>
           </Row>
           <Row style={{ "margin-top": "10px" }}>
+	{thereIsChaos &&
             <Col xs={12}>
-              <h5 id="title-form">Chaos Counter: {info.election_marker}</h5>
+	      <h4 style={{ color: "#cf2121" }}> There is chaos! </h4>
+            </Col>
+	}
+            <Col xs={12}>
+              <h5 id="title-form"> Elect Marker: {info.election_marker}</h5>
             </Col>
             <Col xs={12}>
               <h5 id="title-form">
