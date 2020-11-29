@@ -15,8 +15,13 @@ function Proclamation(props) {
   });
   const [minDiscarded, setMinDiscarded] = useState(false);
   const [disabled, setDisabled] = useState(false);
+  const [disabledExp, setDisabledExp] = useState(false)
+  const [disabledVote, setDisabledVote] = useState(false)
   const [userEmail] = useState(jwtDecode(getToken()).sub);
-
+  const [cardsDE, setCardsDE] = useState(0)
+  const [acceptExp, setAcceptExp] = useState(false)
+  const [msjExpFailed, setMsjExpFailed] = useState(false)
+  const [msjContinueDir, setMsjContinueDir] = useState(false)
   let interval = null;
 
   async function askIsProclaimed() {
@@ -44,6 +49,19 @@ function Proclamation(props) {
       } else if (response.data.phase_game === 1) {
         clearInterval(interval);
         props.setPhase(1);
+      } else if (response.data.phase_game === 7) {
+        if(userEmail === gameInfo.minister.user1) {
+          setAcceptExp(true)
+        }
+      } else if (response.data.phase_game === 8) {
+        if(userEmail === gameInfo.director.user1) {
+          setMsjContinueDir(true)
+          setDisabled(false)
+        }
+        if(userEmail === gameInfo.minister.user1) {
+          setMsjExpFailed(true)
+          setAcceptExp(false)
+        }
       }
     } catch (err) {
       alert(err);
@@ -55,6 +73,28 @@ function Proclamation(props) {
       askIsProclaimed();
     }, 2500);
   };
+
+  const throwExpelliarmus = async () => {
+    setDisabledExp(true)
+    setDisabled(true)
+    try {
+      await axios
+      .put(`http://localhost:8000/expelliarmus?game_name=${gameInfo.game_name}&vote=${true}`)
+      triggerPolling()
+    } catch(err) {
+      alert(err)
+    }      
+  };
+
+  const decideExp = async (ministerVote) => {
+    setDisabledVote(true)
+    try {
+      await axios
+      .put(`http://localhost:8000/expelliarmus?game_name=${gameInfo.game_name}&vote=${ministerVote}`)
+    } catch(err) {
+      alert(err)
+    }
+  }
 
   const discardCard = async () => {
     try {
@@ -106,6 +146,12 @@ function Proclamation(props) {
             `http://localhost:8000/cards/draw_two_cards?game_name=${gameInfo.game_name}`
           );
           setGameInfo({ ...gameInfo, cards: dirResponse.data.cards_list });
+          await axios.get(`http://localhost:8000/game_state?game_name=${gameInfo.game_name}`)
+          .then((response) => {
+            setCardsDE(response.data.num_death_eaters)
+          }).catch(err => {
+            alert(err)
+          })
         }
       } catch (err) {
         alert(err);
@@ -136,6 +182,32 @@ function Proclamation(props) {
               Discard{" "}
             </Button>
           </div>
+          {acceptExp && (
+            <div style={{ "margin-top": "20px" }}>
+              <h5>Director requested Expelliarmus.</h5>
+              <h5>Do you accept it?</h5>
+              <Button
+                disabled={disabledVote}
+                id="btn-form"
+                onClick={() => decideExp(true)}
+              >
+                YES
+              </Button>
+              <Button
+                disabled={disabledVote}
+                id="btn-form"
+                onClick={() => decideExp(false)}
+                style={{ "margin-left": "15px" }}
+              >
+                NO
+              </Button>
+            </div>
+          )}
+          {msjExpFailed ? (
+            <h5 style={{ "margin-top": "15px" }}>
+              You denied the expelliarmus request. The director is proclaiming normally.
+            </h5>
+          ) : null}
         </div>
       )}
       {minDiscarded && userEmail === gameInfo.director.user1 && (
@@ -157,7 +229,22 @@ function Proclamation(props) {
               {" "}
               Discard{" "}
             </Button>
+            {cardsDE == 5 && (
+              <Button
+                disabled={disabledExp}
+                id="btn-form"
+                onClick={throwExpelliarmus}
+                style={{ "margin-left": "20px" }}
+              >
+                Expelliarmus!
+              </Button>
+            )}
           </div>
+          {msjContinueDir ? (
+            <h5 style={{ "margin-top": "15px" }}>
+              The minister denied your request. You can continue proclaiming...
+            </h5>
+          ) : null}
         </div>
       )}
       {!minDiscarded &&
