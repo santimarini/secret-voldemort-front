@@ -32,6 +32,16 @@ function Voting(props) {
     props.setPhase(3);
   }
 
+  const finishImperius = async () => {
+    try {
+      await axios.post(
+        `http://localhost:8000/finish_imperius?game_name=${game_name}`
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   useEffect(() => {
     axios
       .get(`http://localhost:8000/get_player?game_name=${game_name}`, {headers: jwtHeader})
@@ -64,12 +74,14 @@ function Voting(props) {
       );
       if (response.data.phase_game === 3) {
         clearInterval(interval);
+        finishImperius()
         setTimeout(() => {
         setEndVote(true)
         setWin(true)
        }, 5000);
       } else if (response.data.phase_game === 1) {
         clearInterval(interval);
+        finishImperius()
         goToNomination()
       }
     } catch (err) {
