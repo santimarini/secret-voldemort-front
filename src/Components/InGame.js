@@ -16,6 +16,7 @@ function InGame(props) {
   const [phaseCount, setPhaseCount] = useState(props.phase);
   const [profile, setProfile] = useState(false);
   const [spellName, setSpellName] = useState("");
+  const [teamWinner, setTeamWinner] = useState("")
 
   function setPhase(value) {
     setPhaseCount(value);
@@ -23,6 +24,10 @@ function InGame(props) {
 
   function setSpell(value) {
     setSpellName(value);
+  }
+
+  function setWinner(value) {
+    setTeamWinner(value);
   }
 
   return (
@@ -65,6 +70,7 @@ function InGame(props) {
           >
             <Card.Body>
               <Proclamation
+                setWinner={setWinner}
                 setSpell={setSpell}
                 setPhase={setPhase}
                 game_name={gameInfo.game_name}
@@ -104,6 +110,7 @@ function InGame(props) {
               >
                 <Card.Body>
                   <h3> Game ended. </h3>
+                  {teamWinner ? <h3> {teamWinner} won the game! </h3> : null}
                   <div>
                     <Button
                       id="btn-form"

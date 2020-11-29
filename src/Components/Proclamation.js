@@ -46,6 +46,7 @@ function Proclamation(props) {
         props.setPhase(5);
       } else if (response.data.phase_game === 5) {
         clearInterval(interval);
+        props.setWinner(response.data.players.win)
         props.setPhase(4);
       } else if (response.data.phase_game === 1) {
         clearInterval(interval);

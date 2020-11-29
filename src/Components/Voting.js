@@ -18,6 +18,7 @@ function Voting(props) {
   const [voteInfo, setVoteInfo] = useState({});
   const [endVote, setEndVote] = useState(false)
   const [win, setWin] = useState(false)
+  const [voldemortElected, setVoldemortElected] = useState(false)
   const [jwtHeader] = useState({ Authorization: `Bearer ${getToken()}` });
   let interval;
 
@@ -30,6 +31,10 @@ function Voting(props) {
 
   const goToProclamation = () => {
     props.setPhase(3);
+  }
+
+  const goToEnd = () => {
+    props.setPhase(4)
   }
 
   const finishImperius = async () => {
@@ -83,6 +88,10 @@ function Voting(props) {
         clearInterval(interval);
         finishImperius()
         goToNomination()
+      } else if (response.data.phase_game === 5) {
+        clearInterval(interval)
+        setVoldemortElected(true)
+        setTimeout(goToEnd, 8000);
       }
     } catch (err) {
       clearInterval(interval);
@@ -147,9 +156,17 @@ function Voting(props) {
             gamename={game_name}
             postulated={postulated}
           />
-        ) : <h4>The players are voting...</h4>}
+        ) : (
+          <h4>The players are voting...</h4>
+        )}
       </div>
-      <VotingStatus game_name={game_name}/>
+      {voldemortElected ? (
+        <div style={{'margin-top': '15px'}}>
+          <h4>Voldemort has been elected! </h4>
+          <h4 style={{ color: "#1523a3" }}>Death Eaters won the game!</h4>
+        </div>
+      ) : null}
+      <VotingStatus game_name={game_name} />
     </div>
   );
 }
