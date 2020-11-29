@@ -22,6 +22,7 @@ function Proclamation(props) {
   const [acceptExp, setAcceptExp] = useState(false)
   const [msjExpFailed, setMsjExpFailed] = useState(false)
   const [msjContinueDir, setMsjContinueDir] = useState(false)
+  const [msjSpellToAll, setMsjSpellToAll] = useState(false)
   let interval = null;
 
   async function askIsProclaimed() {
@@ -53,6 +54,7 @@ function Proclamation(props) {
         if(userEmail === gameInfo.minister.user1) {
           setAcceptExp(true)
         }
+        setMsjSpellToAll(true)
       } else if (response.data.phase_game === 8) {
         if(userEmail === gameInfo.director.user1) {
           setMsjContinueDir(true)
@@ -259,10 +261,17 @@ function Proclamation(props) {
         userEmail !== gameInfo.director.user1 &&
         triggerPolling()}
       {userEmail !== gameInfo.minister.user1 &&
-        userEmail !== gameInfo.director.user1 && (
+        userEmail !== gameInfo.director.user1 && !msjSpellToAll && (
           <h4 id="title-form">
             The minister {gameInfo.minister.alias} together with the director{" "}
             {gameInfo.director.alias} are proclaiming.
+          </h4>
+        )}
+      {userEmail !== gameInfo.minister.user1 &&
+        userEmail !== gameInfo.director.user1 && msjSpellToAll && (
+          <h4 id="title-form">
+            The minister {gameInfo.minister.alias} together with the director{" "}
+            {gameInfo.director.alias} are agreeing experlliarmus.
           </h4>
         )}
     </div>
