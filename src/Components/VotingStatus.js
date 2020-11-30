@@ -4,16 +4,20 @@ import axios from 'axios';
 
 
 function VotingStatus(props) {
-    const [players, setPlayers] = useState([]);
-    const [isAsking, setIsAsking] = useState(false);
-    var interval = null;
+    const [players, setPlayers] = useState({info: []});
+    const [alivePlayers, setAlivePlayers] = useState([]);
     const [votingEnded, setVotingEnded] = useState(false);
+    var interval = null;
     
+    useEffect(() => {
+        triggerPolling();
+    }, [votingEnded]);
+
     async function getPlayers() {
         await axios
             .get(`http://localhost:8000/get_players?game_name=${props.game_name}`)
             .then((response) => {
-              setPlayers(response.data.players_list);
+              players.info = response.data.players_list;
             })
             .catch((error) => {
                  alert(error);
@@ -22,25 +26,18 @@ function VotingStatus(props) {
 
 
     function triggerPolling() {
-        setIsAsking(true);
         interval = setInterval(() => {
             getPlayers();
-              players.filter((p) =>{return p.is_alive})
-              let alivePlayers = 0;
-              let totalVotes = 0;
-            
-              for(var i = 0; i < players.length; ++i){
-                  if (players[i].vote !== null)
-                      totalVotes +=1
-              }
-              if (totalVotes === players.length && players.length != 0){
-                  clearInterval(interval);
-                  setVotingEnded(true);
-              }
-              else {
-                  setVotingEnded(false);
-              }
-        }, 2500);
+            let totalVotes = 0;
+            let alivePlayers = players.info.filter((p) => p.is_alive === true);
+            setAlivePlayers(alivePlayers);
+            if (alivePlayers.filter((p) => p.vote !== null).length === alivePlayers.length && alivePlayers.length !== 0){
+                clearInterval(interval);
+                setVotingEnded(true);
+            } else {
+                setVotingEnded(false);
+            }
+        }, 3000);
     }
 
     return(
@@ -54,15 +51,15 @@ function VotingStatus(props) {
      >
          <Card.Body>
              <div>
-              {!votingEnded && 
+              {!votingEnded &&
               <div>
                   <h2 id="title-form" style={{ "margin-bottom": "20px" }}>
                     {" "}
                     Voting Status{" "}
                   </h2>
                   <ul class="list-group">
-                    {players.map((player) => (
-                        <li class="list-group-item"> {player.alias} {!player.vote ? ": voting..." : "vote"  }</li>
+                    {alivePlayers.map((player) => (
+                        <li class="list-group-item"> {player.alias} {player.vote === null ? ": voting..." : "vote"  }</li>
                     ))}
                   </ul>
                    <h6 id="title-form" style={{ "margin-top": "30px" }}>
@@ -79,13 +76,12 @@ function VotingStatus(props) {
                </h2>
 
                <ul class="list-group">
-                {players.map((player) => (
-                    <li class="list-group-item">  <div> {player.alias} {": "} {player.vote? "yes": "no"} </div> </li>
+                {alivePlayers.map((player) => (
+                    <li class="list-group-item">  <div> {player.alias} {": "} {player.vote ? "yes": "no"} </div> </li>
                 ))}
               </ul>
               </div>
              }
-             {!isAsking && triggerPolling()}
              </div>
         </Card.Body>
     </Card>
