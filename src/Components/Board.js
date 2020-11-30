@@ -55,6 +55,8 @@ function Board(props) {
                 console.log("pasaron 6 seg")
                 triggerPollingInfo();
             }, 5000);
+        } else {
+            setThereIsChaos(false);
         }
       })
       .catch((error) => {
