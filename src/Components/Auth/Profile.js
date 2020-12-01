@@ -25,8 +25,6 @@ function Profile() {
         .catch((err) => {
           if (err.response.status === 401) {
             setUserImage('https://i.imgur.com/xjdz6j8.jpeg');
-          } else {
-            alert(err);
           }
         });
     }

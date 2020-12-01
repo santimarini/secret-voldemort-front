@@ -20,8 +20,8 @@ function Voting(props) {
   const [jwtHeader] = useState({ Authorization: `Bearer ${getToken()}` });
   let interval;
 
-  const { gameName } = props;
-  const GET_POSTULATED = `http://localhost:8000/postulated?game_name=${gameName}`;
+  const { game_name } = props;
+  const GET_POSTULATED = `http://localhost:8000/postulated?game_name=${game_name}`;
 
   const goToNomination = () => {
     props.setPhase(1);
@@ -38,7 +38,7 @@ function Voting(props) {
   const finishImperius = async () => {
     try {
       await axios.post(
-        `http://localhost:8000/finish_imperius?game_name=${gameName}`,
+        `http://localhost:8000/finish_imperius?game_name=${game_name}`,
       );
     } catch (err) {
       console.log(err);
@@ -48,7 +48,7 @@ function Voting(props) {
   const askForPhaseChange = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/phase?game_name=${gameName}`,
+        `http://localhost:8000/phase?game_name=${game_name}`,
       );
       if (response.data.phase_game === 3) {
         clearInterval(interval);
@@ -82,7 +82,7 @@ function Voting(props) {
     setDisabled(true);
     await axios
       .put(
-        `http://localhost:8000/game/${gameName}/vote?vote=${vote}`,
+        `http://localhost:8000/game/${game_name}/vote?vote=${vote}`,
         {},
         { headers: jwtHeader },
       )
@@ -97,7 +97,7 @@ function Voting(props) {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8000/get_player?game_name=${gameName}`, {
+      .get(`http://localhost:8000/get_player?game_name=${game_name}`, {
         headers: jwtHeader,
       })
       .then((response) => {
@@ -159,7 +159,7 @@ function Voting(props) {
             voteResults={voteInfo}
             forward={goToProclamation}
             win={win}
-            gamename={gameName}
+            gamename={game_name}
             postulated={postulated}
           />
         ) : (
@@ -172,7 +172,7 @@ function Voting(props) {
           <h4 style={{ color: '#1523a3' }}>Death Eaters won the game!</h4>
         </div>
       ) : null}
-      <VotingStatus game_name={gameName} />
+      <VotingStatus game_name={game_name} />
     </div>
   );
 }
