@@ -21,7 +21,7 @@ function UploadPhoto() {
     setSelectedFile(file);
     setFileInputState(e.target.value);
   };
-  
+
   const previewFile = (file) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);

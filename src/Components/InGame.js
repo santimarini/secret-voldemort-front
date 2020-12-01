@@ -16,7 +16,7 @@ function InGame(props) {
   const [phaseCount, setPhaseCount] = useState(props.phase);
   const [profile, setProfile] = useState(false);
   const [spellName, setSpellName] = useState("");
-  const [teamWinner, setTeamWinner] = useState("")
+  const [teamWinner, setTeamWinner] = useState("");
 
   function setPhase(value) {
     setPhaseCount(value);

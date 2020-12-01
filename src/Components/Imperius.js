@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from "react";
 import "../App.css";
 import axios from "axios";
 import { Button } from "react-bootstrap";
@@ -11,13 +11,13 @@ function Imperius(props) {
   const [userEmail, setUserEmail] = useState(jwt_decode(getToken()).sub);
   const [players, setPlayers] = useState([]);
   const [disabled, setDisabled] = useState(false);
-  const [isPolling, setIsPolling] = useState(false)
+  const [isPolling, setIsPolling] = useState(false);
   let interval;
 
-  function goToNomination(){
-    props.setPhase(1)
+  function goToNomination() {
+    props.setPhase(1);
   }
-  
+
   const throwImperius = async () => {
     const playerTarget = document.getElementById("candidate").value;
     await axios
@@ -70,10 +70,10 @@ function Imperius(props) {
   }
 
   useEffect(() => {
-    setUserEmail(jwt_decode(getToken()).sub)
+    setUserEmail(jwt_decode(getToken()).sub);
     getElected();
-    if(userEmail === minister) {
-      getPlayers()
+    if (userEmail === minister) {
+      getPlayers();
     }
   }, [minister, userEmail]);
 

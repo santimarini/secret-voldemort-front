@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import '../App.css';
-import axios from 'axios';
-import {Button} from 'react-bootstrap';
-import VotingResult from './VotingResult';
-import VotingStatus from './VotingStatus';
+import React, { useEffect, useState } from "react";
+import "../App.css";
+import axios from "axios";
+import { Button } from "react-bootstrap";
+import VotingResult from "./VotingResult";
+import VotingStatus from "./VotingStatus";
 
 import jwt_decode from "jwt-decode";
 import { getToken } from "../Util/HelperFunctions";
@@ -11,14 +11,14 @@ import { getToken } from "../Util/HelperFunctions";
 function Voting(props) {
   const [userEmail] = useState(jwt_decode(getToken()).sub);
   const [postulated, setPostulated] = useState({
-    director: '',
-    minister: '',
+    director: "",
+    minister: "",
   });
   const [disabled, setDisabled] = useState(false);
   const [voteInfo, setVoteInfo] = useState({});
-  const [endVote, setEndVote] = useState(false)
-  const [win, setWin] = useState(false)
-  const [voldemortElected, setVoldemortElected] = useState(false)
+  const [endVote, setEndVote] = useState(false);
+  const [win, setWin] = useState(false);
+  const [voldemortElected, setVoldemortElected] = useState(false);
   const [jwtHeader] = useState({ Authorization: `Bearer ${getToken()}` });
   let interval;
 
@@ -27,15 +27,15 @@ function Voting(props) {
 
   const goToNomination = () => {
     props.setPhase(1);
-  }
+  };
 
   const goToProclamation = () => {
     props.setPhase(3);
-  }
+  };
 
   const goToEnd = () => {
-    props.setPhase(4)
-  }
+    props.setPhase(4);
+  };
 
   const finishImperius = async () => {
     try {
@@ -49,11 +49,13 @@ function Voting(props) {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8000/get_player?game_name=${game_name}`, {headers: jwtHeader})
+      .get(`http://localhost:8000/get_player?game_name=${game_name}`, {
+        headers: jwtHeader,
+      })
       .then((response) => {
-        if(!response.data.player.is_alive){
-          setDisabled(true)
-          triggerPolling()
+        if (!response.data.player.is_alive) {
+          setDisabled(true);
+          triggerPolling();
         }
       })
       .catch((error) => {
@@ -75,22 +77,22 @@ function Voting(props) {
   const askForPhaseChange = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/phase?game_name=${game_name}`,
+        `http://localhost:8000/phase?game_name=${game_name}`
       );
       if (response.data.phase_game === 3) {
         clearInterval(interval);
-        finishImperius()
+        finishImperius();
         setTimeout(() => {
-        setEndVote(true)
-        setWin(true)
-       }, 5000);
+          setEndVote(true);
+          setWin(true);
+        }, 5000);
       } else if (response.data.phase_game === 1) {
         clearInterval(interval);
-        finishImperius()
-        goToNomination()
+        finishImperius();
+        goToNomination();
       } else if (response.data.phase_game === 5) {
-        clearInterval(interval)
-        setVoldemortElected(true)
+        clearInterval(interval);
+        setVoldemortElected(true);
         setTimeout(goToEnd, 8000);
       }
     } catch (err) {
@@ -113,14 +115,14 @@ function Voting(props) {
       .catch((error) => {
         alert(error);
       });
-    triggerPolling()
+    triggerPolling();
   };
 
   const triggerPolling = () => {
     interval = setInterval(() => {
       askForPhaseChange();
     }, 2500);
-  }
+  };
 
   return (
     <div>
@@ -161,7 +163,7 @@ function Voting(props) {
         )}
       </div>
       {voldemortElected ? (
-        <div style={{'margin-top': '15px'}}>
+        <div style={{ "margin-top": "15px" }}>
           <h4>Voldemort has been elected! </h4>
           <h4 style={{ color: "#1523a3" }}>Death Eaters won the game!</h4>
         </div>

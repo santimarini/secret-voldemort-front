@@ -7,7 +7,7 @@ import "../App.css";
 
 function Board(props) {
   const [players, setPlayers] = useState([]);
-  const [minister, setMinister] = useState({email: ""});
+  const [minister, setMinister] = useState({ email: "" });
   const [info, setInfo] = useState({});
   const [thereIsChaos, setThereIsChaos] = useState(false);
   let intervalPlayers;
@@ -24,12 +24,11 @@ function Board(props) {
       });
   }
 
-
   async function getElected() {
     await axios
       .get(`http://localhost:8000/postulated?game_name=${props.game_name}`)
       .then((response) => {
-          minister.email = response.data.post_minister.user1;
+        minister.email = response.data.post_minister.user1;
       })
       .catch((error) => {
         alert(error);
@@ -44,19 +43,19 @@ function Board(props) {
       .then(async (response) => {
         setInfo(response.data);
         if (response.data.election_marker === 3) {
-            clearInterval(intervalInfo);
-            setThereIsChaos(true);
-            console.log("minister is: " + minister.email)
-            setTimeout(async () => {
-                if(minister.email === getEmail()) {
-                    await axios
-                        .get(`http://localhost:8000/chaos?game_name=${props.game_name}`)
-                }
-                console.log("pasaron 6 seg")
-                triggerPollingInfo();
-            }, 5000);
+          clearInterval(intervalInfo);
+          setThereIsChaos(true);
+          setTimeout(async () => {
+            if (minister.email === getEmail()) {
+              await axios.get(
+                `http://localhost:8000/chaos?game_name=${props.game_name}`
+              );
+            }
+            console.log("pasaron 6 seg");
+            triggerPollingInfo();
+          }, 5000);
         } else {
-            setThereIsChaos(false);
+          setThereIsChaos(false);
         }
       })
       .catch((error) => {
@@ -103,11 +102,11 @@ function Board(props) {
             </Col>
           </Row>
           <Row style={{ "margin-top": "10px" }}>
-        	{thereIsChaos &&
+            {thereIsChaos && (
               <Col xs={12}>
-	            <h4 style={{ color: "#cf2121" }}> There is chaos! </h4>
+                <h4 style={{ color: "#cf2121" }}> There is chaos! </h4>
               </Col>
-	        }
+            )}
             <Col xs={12}>
               <h5 id="title-form"> Elect Marker: {info.election_marker}</h5>
             </Col>

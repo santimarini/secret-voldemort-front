@@ -5,16 +5,16 @@ import axios from "axios";
 
 function GameList(props) {
   const [games, setGames] = useState([]);
-  const [refresh, setRefresh] = useState(false)
-  const [error, setError] = useState('')
+  const [refresh, setRefresh] = useState(false);
+  const [error, setError] = useState("");
   const server_uri = "http://localhost:8000/show_games";
 
   const joinGame = async (gamename) => {
     await axios
       .get(`http://localhost:8000/game_is_started?game_name=${gamename}`)
       .then((response) => {
-        if (response.data.status === 'started') {
-          setError('The game already started. Please refresh.')
+        if (response.data.status === "started") {
+          setError("The game already started. Please refresh.");
         } else {
           props.history.push(`/game/${gamename}`);
         }
@@ -23,7 +23,7 @@ function GameList(props) {
 
   useEffect(() => {
     async function getGames() {
-      setError('')
+      setError("");
       await axios
         .get(server_uri)
         .then((response) => {
@@ -54,7 +54,7 @@ function GameList(props) {
           </Button>
           <Card.Title id="title-login">
             <h3 id="title-form">Current Games</h3>
-            {error ? <p id='error-msg'>{error}</p> : null}
+            {error ? <p id="error-msg">{error}</p> : null}
           </Card.Title>
           <Card.Text>
             <ListGroup as="ul">
