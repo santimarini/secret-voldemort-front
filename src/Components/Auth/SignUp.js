@@ -9,7 +9,7 @@ const DATA_FORMAT = {
 };
 const ENDPOINT_SU = 'http://localhost:8000/signup';
 
-function SignUp(props) {
+function SignUp() {
   const [userInfo, setUserInfo] = useState({
     alias: '',
     email: '',
@@ -17,7 +17,7 @@ function SignUp(props) {
   });
   const [error, setError] = useState('');
   const [emailError, setEmailError] = useState('');
-  const [checkEmail, setCheckEmail] = useState(false)
+  const [checkEmail, setCheckEmail] = useState(false);
 
   const handleChange = (e) => {
     setUserInfo({ ...userInfo, [e.target.name]: e.target.value });
@@ -36,16 +36,16 @@ function SignUp(props) {
       // if all ok, send post request to backend
       try {
         await axios.post(ENDPOINT_SU, userInfo);
-        setCheckEmail(true)
-        await axios.post(`http://localhost:8000/send_email?user_email=${userInfo.email}`)
+        setCheckEmail(true);
+        await axios.post(`http://localhost:8000/send_email?user_email=${userInfo.email}`);
       } catch (error) {
-        setCheckEmail(false)
+        setCheckEmail(false);
         if (error.response.status === 404) {
           setEmailError('Email entered is already registered. Please enter another email.');
         } else { alert(error); }
       }
     } catch (err) {
-      setCheckEmail(false)
+      setCheckEmail(false);
       setError(`Invalid ${err.message}. Please insert a ${err.message} between ${DATA_FORMAT.min} to ${DATA_FORMAT.max} characters.`);
     }
   };

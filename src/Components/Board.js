@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { Card, Row, Col } from "react-bootstrap";
-import axios from "axios";
+import React, { useEffect, useState } from 'react';
+import { Card, Row, Col } from 'react-bootstrap';
+import axios from 'axios';
 
-import { getEmail } from "../Util/HelperFunctions";
-import "../App.css";
+import { getEmail } from '../Util/HelperFunctions';
+import '../App.css';
 
 function Board(props) {
   const [players, setPlayers] = useState([]);
-  const [minister, setMinister] = useState({ email: "" });
+  const [minister] = useState({ email: '' });
   const [info, setInfo] = useState({});
   const [thereIsChaos, setThereIsChaos] = useState(false);
   let intervalPlayers;
@@ -48,10 +48,10 @@ function Board(props) {
           setTimeout(async () => {
             if (minister.email === getEmail()) {
               await axios.get(
-                `http://localhost:8000/chaos?game_name=${props.game_name}`
+                `http://localhost:8000/chaos?game_name=${props.game_name}`,
               );
             }
-            console.log("pasaron 6 seg");
+            console.log('pasaron 6 seg');
             triggerPollingInfo();
           }, 5000);
         } else {
@@ -62,11 +62,6 @@ function Board(props) {
         alert(error);
       });
   }
-
-  useEffect(() => {
-    triggerPollingPlayers();
-    triggerPollingInfo();
-  }, []);
 
   const triggerPollingPlayers = () => {
     intervalPlayers = setInterval(() => {
@@ -80,48 +75,69 @@ function Board(props) {
     }, 5000);
   };
 
+  useEffect(() => {
+    triggerPollingPlayers();
+    triggerPollingInfo();
+  }, []);
+
   return (
     <div>
       <Card
         border="dark"
         bg="light"
-        style={{ width: "50rem" }}
+        style={{ width: '50rem' }}
         id="card-profile"
       >
         <Card.Body>
           <Row>
             <Col>
-              <h5 style={{ color: "#cf2121" }}>
-                Fenix Order: {info.num_fenix_orders} Proclamations
+              <h5 style={{ color: '#cf2121' }}>
+                Fenix Order:
+                {' '}
+                {info.num_fenix_orders}
+                {' '}
+                Proclamations
               </h5>
             </Col>
             <Col>
-              <h5 style={{ color: "#1523a3" }}>
-                Death Eaters: {info.num_death_eaters} Proclamations
+              <h5 style={{ color: '#1523a3' }}>
+                Death Eaters:
+                {' '}
+                {info.num_death_eaters}
+                {' '}
+                Proclamations
               </h5>
             </Col>
           </Row>
-          <Row style={{ "margin-top": "10px" }}>
+          <Row style={{ 'margin-top': '10px' }}>
             {thereIsChaos && (
               <Col xs={12}>
-                <h4 style={{ color: "#cf2121" }}> There is chaos! </h4>
+                <h4 style={{ color: '#cf2121' }}> There is chaos! </h4>
               </Col>
             )}
             <Col xs={12}>
-              <h5 id="title-form"> Elect Marker: {info.election_marker}</h5>
-            </Col>
-            <Col xs={12}>
               <h5 id="title-form">
-                Remaining cards in deck: {info.num_proclamations_avilables}
+                {' '}
+                Elect Marker:
+                {info.election_marker}
               </h5>
             </Col>
             <Col xs={12}>
               <h5 id="title-form">
-                Cards discarted: {info.num_proclamations_discarted}
+                Remaining cards in deck:
+                {' '}
+                {info.num_proclamations_avilables}
+              </h5>
+            </Col>
+            <Col xs={12}>
+              <h5 id="title-form">
+                Cards discarted:
+                {' '}
+                {info.num_proclamations_discarted}
               </h5>
             </Col>
           </Row>
-          <Row style={{ "margin-top": "10px" }}>
+          <Row style={{ 'margin-top': '10px' }}>
             <Col>
               <h4>Alive players</h4>
               {players.map((player) => {

@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   MDBNavbar,
-  MDBNavbarBrand,
   MDBNavbarNav,
   MDBNavItem,
   MDBNavLink,
@@ -11,13 +10,13 @@ import {
   MDBDropdownToggle,
   MDBDropdownMenu,
   MDBDropdownItem,
-} from "mdbreact";
-import { BrowserRouter as Router, Link } from "react-router-dom";
+} from 'mdbreact';
+import { Link } from 'react-router-dom';
 
-import { getToken, getAlias, getEmail } from "../Util/HelperFunctions";
+import { getToken, getAlias, getEmail } from '../Util/HelperFunctions';
 
-function Navbar(props) {
-  const [token, setToken] = useState(getToken());
+function Navbar() {
+  const [token] = useState(getToken());
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -25,9 +24,9 @@ function Navbar(props) {
     setIsOpen(isOpen);
   };
 
-  const logout = (e) => {
+  const logout = () => {
     localStorage.clear();
-    window.location.href = "/";
+    window.location.href = '/';
   };
 
   return (
@@ -71,7 +70,7 @@ function Navbar(props) {
                     </MDBDropdownToggle>
                     <div className="alias-desplegated">
                       <MDBDropdownMenu>
-                        <p class="text-lowercase" className="email-navbar">
+                        <p className="text-lowercase" className="email-navbar">
                           {getEmail()}
                         </p>
                         <MDBDropdownItem tag={Link} to="/profile">

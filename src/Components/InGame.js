@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import { Button, Card } from "react-bootstrap";
-import Nomination from "./Nomination";
-import Voting from "./Voting";
-import Proclamation from "./Proclamation";
-import Profile from "./Auth/Profile";
-import PlayerInfo from "./PlayerInfo";
-import Spells from "./Spells";
-import Board from "./Board";
+import React, { useState } from 'react';
+import { Button, Card } from 'react-bootstrap';
+import Nomination from './Nomination';
+import Voting from './Voting';
+import Proclamation from './Proclamation';
+import Profile from './Auth/Profile';
+import PlayerInfo from './PlayerInfo';
+import Spells from './Spells';
+import Board from './Board';
 
 function InGame(props) {
   const [gameInfo] = useState({
@@ -15,8 +15,8 @@ function InGame(props) {
 
   const [phaseCount, setPhaseCount] = useState(props.phase);
   const [profile, setProfile] = useState(false);
-  const [spellName, setSpellName] = useState("");
-  const [teamWinner, setTeamWinner] = useState("");
+  const [spellName, setSpellName] = useState('');
+  const [teamWinner, setTeamWinner] = useState('');
 
   function setPhase(value) {
     setPhaseCount(value);
@@ -37,7 +37,7 @@ function InGame(props) {
           <Card
             border="dark"
             bg="light"
-            style={{ width: "50rem" }}
+            style={{ width: '50rem' }}
             id="card-profile"
           >
             <Card.Body>
@@ -51,7 +51,7 @@ function InGame(props) {
           <Card
             border="dark"
             bg="light"
-            style={{ width: "50rem" }}
+            style={{ width: '50rem' }}
             id="card-profile"
           >
             <Card.Body>
@@ -65,7 +65,7 @@ function InGame(props) {
           <Card
             border="dark"
             bg="light"
-            style={{ width: "50rem" }}
+            style={{ width: '50rem' }}
             id="card-profile"
           >
             <Card.Body>
@@ -85,7 +85,7 @@ function InGame(props) {
           <Card
             border="dark"
             bg="light"
-            style={{ width: "50rem" }}
+            style={{ width: '50rem' }}
             id="card-profile"
           >
             <Card.Body>
@@ -105,20 +105,29 @@ function InGame(props) {
               <Card
                 border="dark"
                 bg="light"
-                style={{ width: "50rem" }}
+                style={{ width: '50rem' }}
                 id="card-profile"
               >
                 <Card.Body>
                   <h3> Game ended. </h3>
-                  {teamWinner ? <h3> {teamWinner} won the game! </h3> : null}
+                  {teamWinner ? (
+                    <h3>
+                      {' '}
+                      {teamWinner}
+                      {' '}
+                      won the game!
+                      {' '}
+                    </h3>
+                  ) : null}
                   <div>
                     <Button
                       id="btn-form"
-                      style={{ "margin-top": "25px" }}
+                      style={{ 'margin-top': '25px' }}
                       onClick={() => setProfile(true)}
                     >
-                      {" "}
-                      Go to profile{" "}
+                      {' '}
+                      Go to profile
+                      {' '}
                     </Button>
                   </div>
                 </Card.Body>

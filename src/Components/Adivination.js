@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
-import "../App.css";
-import axios from "axios";
+import React, { useEffect, useState } from 'react';
+import '../App.css';
+import axios from 'axios';
 
-import jwt_decode from "jwt-decode";
-import { getToken } from "../Util/HelperFunctions";
+import jwtDecode from 'jwt-decode';
+import { getToken } from '../Util/HelperFunctions';
 
 function Adivination(props) {
-  const [minister, setMinister] = useState("");
+  const [minister, setMinister] = useState('');
   const [cardList, setCardList] = useState([]);
-  const [userEmail] = useState(jwt_decode(getToken()).sub);
+  const [userEmail] = useState(jwtDecode(getToken()).sub);
   const [seconds, setSeconds] = useState(20);
   const [isPolling, setIsPolling] = useState(false);
   let interval;
@@ -27,19 +27,19 @@ function Adivination(props) {
     async function getTopCards() {
       try {
         const response = await axios.get(
-          `http://localhost:8000/cards/draw_three_cards?game_name=${props.game_name}`
+          `http://localhost:8000/cards/draw_three_cards?game_name=${props.game_name}`,
         );
         setCardList(response.data.cards_list);
         setTimeout(() => {
           axios.post(
             `http://localhost:8000/phase?game_name=${
               props.game_name
-            }&phase=${1}`
+            }&phase=${1}`,
           );
         }, 20000);
-        setInterval(function () {
-          if(seconds <= 0) {
-            setSeconds(0)
+        setInterval(() => {
+          if (seconds <= 0) {
+            setSeconds(0);
           } else {
             setSeconds((seconds) => seconds - 1);
           }
@@ -55,7 +55,7 @@ function Adivination(props) {
   async function askSpellEnd() {
     try {
       const response = await axios.get(
-        `http://localhost:8000/phase?game_name=${props.game_name}`
+        `http://localhost:8000/phase?game_name=${props.game_name}`,
       );
       if (response.data.phase_game === 1) {
         clearInterval(interval);
@@ -82,20 +82,10 @@ function Adivination(props) {
           <h5>These are the 3 top cards of the deck:</h5>
           {cardList.map((card) => {
             {
-              if (card.loyalty === "Fenix Order") {
+              if (card.loyalty === 'Fenix Order') {
                 return (
                   <h5
-                    style={{ color: "#f52525" }}
-                    id="title-form"
-                    key={card.loyalty}
-                  >
-                    {card.loyalty}
-                  </h5>
-                );
-              } else {
-                return (
-                  <h5
-                    style={{ color: "#1b2dd1" }}
+                    style={{ color: '#f52525' }}
                     id="title-form"
                     key={card.loyalty}
                   >
@@ -103,14 +93,23 @@ function Adivination(props) {
                   </h5>
                 );
               }
+              return (
+                <h5
+                  style={{ color: '#1b2dd1' }}
+                  id="title-form"
+                  key={card.loyalty}
+                >
+                  {card.loyalty}
+                </h5>
+              );
             }
           })}
         </div>
       )}
-      {minister !== "" &&
-        !isPolling &&
-        userEmail !== minister &&
-        triggerPolling()}
+      {minister !== ''
+        && !isPolling
+        && userEmail !== minister
+        && triggerPolling()}
       {userEmail !== minister && (
         <h4 id="title-form">
           The minister throw 'Adivination' and is guessing...

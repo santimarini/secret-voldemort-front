@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import "../../App.css";
-import { Card } from "react-bootstrap";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import '../../App.css';
+import { Card } from 'react-bootstrap';
 
 function EmailConfirmed(props) {
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   useEffect(() => {
     async function sendConfirmation() {
       try {
         await axios.get(
-          `http://localhost:8000/validate/${props.match.params.token}`
+          `http://localhost:8000/validate/${props.match.params.token}`,
         );
       } catch (error) {
         setError(error.response.data.detail);
@@ -24,7 +24,7 @@ function EmailConfirmed(props) {
       <Card
         border="dark"
         bg="light"
-        style={{ width: "50rem" }}
+        style={{ width: '50rem' }}
         id="card-profile"
       >
         <Card.Body>

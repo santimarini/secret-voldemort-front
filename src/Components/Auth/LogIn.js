@@ -1,15 +1,15 @@
-import React, { useState } from "react";
-import axios from "axios";
-import { Card, Button, Form } from "react-bootstrap";
+import React, { useState } from 'react';
+import axios from 'axios';
+import { Card, Button, Form } from 'react-bootstrap';
 
-const server_uri = "http://localhost:8000/token";
+const serverURI = 'http://localhost:8000/token';
 
-function LogIn(props) {
+function LogIn() {
   const [userInfo, setUserInfo] = useState({
-    email: "",
-    password: "",
+    email: '',
+    password: '',
   });
-  const [err, setErr] = useState("");
+  const [err, setErr] = useState('');
 
   // get all user inputs
   const updateUserInfo = (e) => {
@@ -21,13 +21,13 @@ function LogIn(props) {
     e.preventDefault();
 
     const bodyFormData = new FormData();
-    bodyFormData.append("username", userInfo.email);
-    bodyFormData.append("password", userInfo.password);
+    bodyFormData.append('username', userInfo.email);
+    bodyFormData.append('password', userInfo.password);
     try {
-      const response = await axios.post(server_uri, bodyFormData);
-      localStorage.setItem("token", response.data.access_token);
-      localStorage.setItem("alias", response.data.alias);
-      window.location.href = "/";
+      const response = await axios.post(serverURI, bodyFormData);
+      localStorage.setItem('token', response.data.access_token);
+      localStorage.setItem('alias', response.data.alias);
+      window.location.href = '/';
     } catch (error) {
       // set error message
       if (error.response.status === 404) {
@@ -40,7 +40,7 @@ function LogIn(props) {
 
   return (
     <div className="container">
-      <Card bg="light" style={{ width: "25rem" }} id="card-form">
+      <Card bg="light" style={{ width: '25rem' }} id="card-form">
         <Card.Body>
           <Card.Title id="title-login">Login for play!</Card.Title>
           <Form id="text-form" onSubmit={sendUserInfo}>

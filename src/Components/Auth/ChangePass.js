@@ -1,22 +1,23 @@
-import React, { useState } from "react";
-import { Card, Accordion, Button, Form } from "react-bootstrap";
-import axios from "axios";
+import React, { useState } from 'react';
+import {
+  Card, Accordion, Button, Form,
+} from 'react-bootstrap';
+import axios from 'axios';
 
-import { getToken } from "../../Util/HelperFunctions";
+import { getToken } from '../../Util/HelperFunctions';
 
 function ChangePass() {
   const [passInfo, setPassInfo] = useState({
-    actual_pass: "",
-    new_pass: "",
-    confirm_new_pass: "",
+    actual_pass: '',
+    new_pass: '',
+    confirm_new_pass: '',
   });
   const [jwtHeader] = useState({ Authorization: `Bearer ${getToken()}` });
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
-  const server_uri =
-    `http://localhost:8000/change_password?old_password=${passInfo.actual_pass}&` +
-    `new_password=${passInfo.new_pass}&confirm_new_password=${passInfo.confirm_new_pass}`;
+  const serverURI = `http://localhost:8000/change_password?old_password=${passInfo.actual_pass}&`
+    + `new_password=${passInfo.new_pass}&confirm_new_password=${passInfo.confirm_new_pass}`;
 
   const handleChange = (e) => {
     setPassInfo({ ...passInfo, [e.target.name]: e.target.value });
@@ -25,13 +26,13 @@ function ChangePass() {
   const changePassword = async (e) => {
     e.preventDefault();
     await axios
-      .post(server_uri, {}, { headers: jwtHeader })
+      .post(serverURI, {}, { headers: jwtHeader })
       .then((response) => {
-        setError("");
+        setError('');
         setSuccess(response.data);
       })
       .catch((error) => {
-        setSuccess("");
+        setSuccess('');
         setError(error.response.data.detail);
       });
   };
@@ -80,14 +81,24 @@ function ChangePass() {
               </Button>
 
               {success && (
-                <h6 style={{ "margin-top": "-30px", color: "#008000" }}>
-                  {" "}
-                  <center> {success} </center>{" "}
+                <h6 style={{ 'margin-top': '-30px', color: '#008000' }}>
+                  {' '}
+                  <center>
+                    {' '}
+                    {success}
+                    {' '}
+                  </center>
+                  {' '}
                 </h6>
               )}
               {error && (
-                <h6 style={{ "margin-top": "-30px", color: "#FF0000" }}>
-                  <center> {error} </center>{" "}
+                <h6 style={{ 'margin-top': '-30px', color: '#FF0000' }}>
+                  <center>
+                    {' '}
+                    {error}
+                    {' '}
+                  </center>
+                  {' '}
                 </h6>
               )}
             </Form>

@@ -1,12 +1,14 @@
-import React, { useState } from "react";
-import axios from "axios";
-import { getToken } from "../../Util/HelperFunctions";
-import { Accordion, Button, Card, Form } from "react-bootstrap";
+import React, { useState } from 'react';
+import axios from 'axios';
+import {
+  Accordion, Button, Card, Form,
+} from 'react-bootstrap';
+import { getToken } from '../../Util/HelperFunctions';
 
 function ChangeAlias() {
-  const [alias, setAlias] = useState({ value: "" });
-  const [successMsg, setSuccessMsg] = useState("");
-  const [errMsg, setErrMsg] = useState("");
+  const [alias, setAlias] = useState({ value: '' });
+  const [successMsg, setSuccessMsg] = useState('');
+  const [errMsg, setErrMsg] = useState('');
   const [jwtHeader] = useState({ Authorization: `Bearer ${getToken()}` });
 
   const handleChange = (e) => {
@@ -16,18 +18,17 @@ function ChangeAlias() {
   const changeAlias = async (e) => {
     e.preventDefault();
     try {
-      let response = await axios.post(
+      await axios.post(
         `http://localhost:8000/change_alias?alias=${alias.value}`,
         {},
-        { headers: jwtHeader }
+        { headers: jwtHeader },
       );
-      localStorage.setItem("alias", alias.value);
-      setSuccessMsg("Alias updated successfully!");
+      localStorage.setItem('alias', alias.value);
+      setSuccessMsg('Alias updated successfully!');
       setTimeout(() => {
-        window.location.href = "/profile";
+        window.location.href = '/profile';
       }, 2000);
     } catch (err) {
-      console.log(err.response);
       if (err.response.status === 401) {
         setErrMsg(err.response.data.detail);
       } else {
@@ -60,15 +61,23 @@ function ChangeAlias() {
                 Change
               </Button>
               {successMsg && (
-                <h6 style={{ "margin-top": "-30px", color: "#008000" }}>
-                  {" "}
-                  <center> {successMsg} </center>
+                <h6 style={{ 'margin-top': '-30px', color: '#008000' }}>
+                  {' '}
+                  <center>
+                    {' '}
+                    {successMsg}
+                    {' '}
+                  </center>
                 </h6>
               )}
               {errMsg && !successMsg && (
-                <h6 style={{ "margin-top": "-30px", color: "#FF0000" }}>
-                  {" "}
-                  <center> {errMsg} </center>
+                <h6 style={{ 'margin-top': '-30px', color: '#FF0000' }}>
+                  {' '}
+                  <center>
+                    {' '}
+                    {errMsg}
+                    {' '}
+                  </center>
                 </h6>
               )}
             </Form>
